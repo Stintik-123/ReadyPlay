@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ReadyPlay — Игры с аккаунтами</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0c10;
+            --bg-secondary: #121826;
+            --bg-card: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8cc;
+            --accent: #ff3a3a;
+            --accent-hover: #ff5555;
+            --border: #2a2f3c;
+            --success: #2ecc71;
+        }
+
+        body.light {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555555;
+            --border: #e0e0e0;
+            --accent: #e53935;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--accent)15, var(--bg-primary));
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .top-week {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .top-games-list {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .top-game-item {
+            min-width: 150px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .top-game-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .search-section {
+            max-width: 500px;
+            margin: 1rem auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            color: var(--text-primary);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: 0.25s;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .game-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .game-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        .game-info {
+            padding: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            max-width: 800px;
+            width: 100%;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .screenshots {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .screenshot {
+            width: 200px;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.02);
+        }
+
+        .trailer-container {
+            margin: 1rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .trailer-container iframe {
+            width: 100%;
+            height: 280px;
+            border: none;
+        }
+
+        .rating-inline {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .rating-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .rating-btn.active-up {
+            background: var(--success);
+            color: white;
+        }
+
+        .rating-btn.active-down {
+            background: var(--accent);
+            color: white;
+        }
+
+        .account-item {
+            background: var(--bg-card);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 16px;
+        }
+
+        .profile-panel {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--bg-card);
+            border: 3px solid var(--accent);
+        }
+
+        .subscriptions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .sub-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            transform: translateX(150%);
+            transition: 0.25s;
+            z-index: 1100;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 700px) {
+            .header-content { flex-direction: column; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .trailer-container iframe { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="#" class="logo" onclick="showHome()"><i class="fas fa-gamepad"></i> ReadyPlay</a>
+        <ul class="nav-links">
+            <li><a onclick="showHome()" id="navHome">Главная</a></li>
+            <li><a onclick="showProfile()" id="navProfile">👤 Кабинет</a></li>
+        </ul>
+        <div style="display: flex; gap: 0.8rem;">
+            <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i> Тема</button>
+        </div>
+    </div>
+</header>
+
+<section class="hero" id="heroSection">
+    <h1>Готовые аккаунты Steam</h1>
+    <div class="hero-stats">
+        <span><i class="fas fa-key"></i> <strong id="totalAccounts">0</strong> аккаунтов</span>
+        <span><i class="fas fa-gamepad"></i> <strong id="totalGames">0</strong> игр</span>
+        <span><i class="fas fa-bell"></i> Подпишись на игры</span>
+    </div>
+</section>
+
+<main style="max-width: 1400px; margin: 0 auto; padding: 0 2rem 2rem;">
+    <div class="top-week" id="topWeekSection">
+        <h3><i class="fas fa-trophy" style="color: var(--accent);"></i> Топ игр недели по рейтингу</h3>
+        <div class="top-games-list" id="topGamesList"></div>
+    </div>
+
+    <div id="profileSection" style="display: none;">
+        <div class="profile-panel">
+            <h3><i class="fas fa-user-circle"></i> Мой профиль</h3>
+            <div class="avatar-section">
+                <img id="profileAvatar" class="avatar" src="https://ui-avatars.com/api/?background=ff3a3a&color=fff&name=User">
+                <div>
+                    <input type="text" id="nicknameInput" placeholder="Никнейм" style="background: var(--bg-card); border: 1px solid var(--border); padding: 0.5rem; border-radius: 40px; color: var(--text-primary);">
+                    <button class="btn btn-primary" onclick="updateNickname()" style="margin-left: 0.5rem;">Сменить ник</button>
+                    <div style="margin-top: 0.5rem;">
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadAvatar(this)">
+                        <button class="btn btn-outline" onclick="document.getElementById('avatarUpload').click()">Загрузить аватар</button>
+                    </div>
+                </div>
+            </div>
+            <p><strong>Статистика:</strong> Оценок: <span id="profileRatings">0</span></p>
+        </div>
+
+        <div class="profile-panel">
+            <h3><i class="fas fa-bell"></i> Мои подписки на игры</h3>
+            <div id="subscriptionsList" class="subscriptions-list"></div>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary);">Подпишись — когда появится новый аккаунт, ты узнаешь первым!</p>
+        </div>
+
+        <div class="qr-section" style="text-align: center; padding: 1rem; background: var(--bg-card); border-radius: 20px;">
+            <h4><i class="fas fa-qrcode"></i> QR код для быстрого входа</h4>
+            <div id="qrCode" style="width: 150px; height: 150px; margin: 0 auto; background: white; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
+                <i class="fas fa-qrcode" style="font-size: 80px; color: black;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="homeSection">
+        <div class="search-section">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск игр...">
+        </div>
+        <div class="games-grid" id="gamesGrid"></div>
+    </div>
+</main>
+
+<div class="modal" id="gameModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle" style="color: var(--accent);">Игра</h2>
+            <button onclick="closeModal()" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+        </div>
+        <div style="padding: 1.5rem;">
+            <p id="gameDescription" style="margin-bottom: 1rem;"></p>
+            <div class="trailer-container" id="gameTrailer"></div>
+            <div class="screenshots" id="gameScreenshots"></div>
+            <div class="rating-inline">
+                <button class="rating-btn" id="likeBtn" onclick="rateGameInModal('like')">👍 <span id="likesCount">0</span></button>
+                <button class="rating-btn" id="dislikeBtn" onclick="rateGameInModal('dislike')">👎 <span id="dislikesCount">0</span></button>
+                <button class="rating-btn" id="subscribeBtn" onclick="toggleSubscribe()">🔔 Подписаться</button>
+            </div>
+            <h4><i class="fas fa-key"></i> Доступные аккаунты</h4>
+            <div id="modalAccountsList"></div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    let gamesStore = [];
+    let currentGameId = null;
+    let currentUser = { name: "Гость", avatar: null, ratings: {}, subscriptions: [] };
+
+    function loadUserData() {
+        let saved = localStorage.getItem('readyplay_user');
+        if(saved) {
+            try {
+                let data = JSON.parse(saved);
+                currentUser = data;
+                if(!currentUser.subscriptions) currentUser.subscriptions = [];
+                if(!currentUser.ratings) currentUser.ratings = {};
+                document.getElementById('nicknameInput').value = currentUser.name || "Гость";
+                document.getElementById('profileRatings').innerText = Object.keys(currentUser.ratings || {}).length;
+                if(currentUser.avatar) {
+                    document.getElementById('profileAvatar').src = currentUser.avatar;
+                } else {
+                    document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?background=ff3a3a&color=fff&name=${encodeURIComponent(currentUser.name || "User")}`;
+                }
+                updateSubscriptionsUI();
+            } catch(e) {}
+        }
+    }
+
+    function saveUserData() {
+        localStorage.setItem('readyplay_user', JSON.stringify(currentUser));
+        document.getElementById('profileRatings').innerText = Object.keys(currentUser.ratings || {}).length;
+        if(!currentUser.avatar) {
+            document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?background=ff3a3a&color=fff&name=${encodeURIComponent(currentUser.name || "User")}`;
+        }
+        updateSubscriptionsUI();
+    }
+
+    function updateSubscriptionsUI() {
+        let container = document.getElementById('subscriptionsList');
+        if(!container) return;
+        let subs = currentUser.subscriptions || [];
+        if(subs.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-secondary);">Вы пока не подписаны ни на одну игру. Откройте игру и нажмите "Подписаться"</p>';
+            return;
+        }
+        container.innerHTML = subs.map(gameId => {
+            let game = gamesStore.find(g => g.id == gameId);
+            return `<div class="sub-badge">${game ? game.title : 'Игра'} <button onclick="unsubscribeGame(${gameId})" style="background: none; border: none; color: var(--accent); cursor: pointer;">✕</button></div>`;
+        }).join('');
+    }
+
+    function unsubscribeGame(gameId) {
+        currentUser.subscriptions = currentUser.subscriptions.filter(id => id != gameId);
+        saveUserData();
+        showToast("Вы отписались от уведомлений");
+        if(currentGameId == gameId) {
+            let subBtn = document.getElementById('subscribeBtn');
+            if(subBtn) subBtn.innerHTML = '🔔 Подписаться';
+        }
+    }
+
+    function checkNewAccountsAndNotify() {
+        let lastCheck = localStorage.getItem('readyplay_last_check') || '{}';
+        try { lastCheck = JSON.parse(lastCheck); } catch(e) { lastCheck = {}; }
+        for(let game of gamesStore) {
+            let prevCount = lastCheck[game.id] || 0;
+            if(game.accountsList.length > prevCount && prevCount !== 0) {
+                if(currentUser.subscriptions && currentUser.subscriptions.includes(game.id)) {
+                    showToast(`🔔 НОВЫЙ АККАУНТ в игре ${game.title}! Зайди и забери!`);
+                }
+            }
+            lastCheck[game.id] = game.accountsList.length;
+        }
+        localStorage.setItem('readyplay_last_check', JSON.stringify(lastCheck));
+    }
+
+    window.updateNickname = () => {
+        let newName = document.getElementById('nicknameInput').value.trim();
+        if(newName) {
+            currentUser.name = newName;
+            saveUserData();
+            showToast(`Никнейм изменён на ${newName}`);
+        }
+    };
+
+    window.uploadAvatar = (input) => {
+        let file = input.files[0];
+        if(file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                currentUser.avatar = e.target.result;
+                document.getElementById('profileAvatar').src = e.target.result;
+                saveUserData();
+                showToast("Аватар обновлён!");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    function initGames() {
+        gamesStore = [
+            { id: 1, title: "Cyberpunk 2077", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg", description: "Откройте для себя историю Ви — наёмника в Night City. Мегаполис, где власть, роскошь и модификации тела ценятся выше всего.", trailer: "qIcTM8WXFjk", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/ss_1d2d1e2f8e6b0f6c5b0e1f9c7a8b3c2d.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/ss_2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/ss_3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b.jpg"], accountsList: [{login:"cyber_user", password:"nightcity2077"}], likes: 156, dislikes: 23 },
+            { id: 2, title: "The Witcher 3", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg", description: "Станьте профессиональным охотником на монстров Геральтом из Ривии и исследуйте эпический мир.", trailer: "c0i88t0KZmw", screenshots: ["https://shared.fastl
