@@ -693,4 +693,222 @@
         </div>
 
         <div class="search-container">
-            <div 
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск игр...">
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Все игры</button>
+            <button class="filter-btn" data-filter="available">Доступные (есть акки)</button>
+            <button class="filter-btn" data-filter="popular">Популярные (≥3 аккаунтов)</button>
+        </div>
+
+        <div class="games-grid" id="gamesGrid"></div>
+    </div>
+</main>
+
+<!-- Модалка игры -->
+<div class="modal" id="gameModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle" style="color: var(--accent);">Название игры</h2>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <h4><i class="fas fa-key"></i> Доступные аккаунты</h4>
+            <div id="modalAccounts"></div>
+            <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
+                <i class="fab fa-telegram"></i> Нажмите «Получить данные» — вы перейдёте в Telegram-бот для получения логина и пароля
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+    <div class="logo-text" style="font-size: 1.5rem; margin-bottom: 0.5rem;">READY<span>PLAY</span></div>
+    <p>🔓 Все аккаунты предоставлены в ознакомительных целях. Не меняйте пароли, играйте честно.</p>
+    <p style="margin-top: 0.5rem;">© 2026 ReadyPlay — реальные данные, полная выдача логинов и паролей</p>
+</footer>
+
+<script>
+    // ---------------------------------------------------------------
+    // ВСЕ ИГРЫ И АККАУНТЫ ИЗ ПЕРВОГО ФАЙЛА (SteamShare)
+    // ---------------------------------------------------------------
+    let games = [
+        { id: 1, title: "Payday 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/218620/header.jpg", accounts: [{ login: "mwppm82372", password: "cpmrt70803" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 2, title: "Sons of the Forest", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1326470/header.jpg", accounts: [{ login: "mwppm82372", password: "cpmrt70803" }] },
+        { id: 3, title: "Subnautica", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg", accounts: [{ login: "hfsdfz", password: "xvdgfghfh" }] },
+        { id: 4, title: "Euro Truck Simulator 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/227300/header.jpg", accounts: [{ login: "ljtto83479", password: "DXPzyqv4Vkhp" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 5, title: "Garry's Mod", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4000/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
+        { id: 6, title: "Call of Duty: Black Ops II", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/202970/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
+        { id: 7, title: "Schedule I", poster: "https://avatars.mds.yandex.net/get-entity_search/5509992/1276468406/SUx182_2x", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
+        { id: 8, title: "Teardown", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1167630/0fb92d7a56cf3970f2f213ff5c7636a03251a407/header_alt_assets_6_russian.jpg?t=1781163092", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
+        { id: 9, title: "Geometry Dash", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
+        { id: 10, title: "Atomic Heart", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/668580/header.jpg", accounts: [{ login: "bromasenun1976", password: "M7Fv81OzIY1978" }] },
+        { id: 11, title: "Metro Exodus", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/412020/header.jpg", accounts: [{ login: "bromasenun1976", password: "M7Fv81OzIY1978" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 12, title: "Half-Life 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 13, title: "Left 4 Dead 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/550/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 14, title: "Metro 2033", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/43110/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 15, title: "Metro 2033 Redux", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/286690/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 16, title: "Metro: Last Light Redux", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/287390/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 17, title: "Payday 3", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1272080/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 18, title: "Portal 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 19, title: "Car Mechanic Simulator 2021", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1190000/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 20, title: "Batman: Arkham Origins", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/209000/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 21, title: "Batman: Arkham Knight", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/208650/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 22, title: "Human: Fall Flat", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/477160/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 23, title: "Dead Island 2", poster: "https://avatars.mds.yandex.net/get-entity_search/5394189/1276347784/SUx182_2x", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
+        { id: 24, title: "The Sims 4", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] }
+    ];
+
+    function updateStats() {
+        let totalAccs = games.reduce((sum, g) => sum + (g.accounts?.length || 0), 0);
+        document.getElementById('totalAccountsStat').innerText = totalAccs;
+        document.getElementById('totalGamesStat').innerText = games.length;
+    }
+
+    function renderGamesUI(filterText = "", filterType = "all") {
+        let filtered = [...games];
+        if (filterType === "available") filtered = filtered.filter(g => g.accounts && g.accounts.length > 0);
+        if (filterType === "popular") filtered = filtered.filter(g => g.accounts && g.accounts.length >= 3);
+        if (filterText.trim() !== "") {
+            filtered = filtered.filter(g => g.title.toLowerCase().includes(filterText.toLowerCase()));
+        }
+        const grid = document.getElementById('gamesGrid');
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">🔍 Игры не найдены, попробуйте другой запрос.</div>`;
+            return;
+        }
+        grid.innerHTML = filtered.map(game => `
+            <div class="game-card" onclick="openModal(${game.id})">
+                <div class="game-image" style="background-image: url('${game.poster}'); background-size: cover; background-position: center;">
+                    <div class="game-badge"><i class="fas fa-key"></i> ${game.accounts.length} аккаунтов</div>
+                </div>
+                <div class="game-info">
+                    <div class="game-title">${escapeHtml(game.title)}</div>
+                    <div class="game-stats"><span><i class="fas fa-database"></i> ${game.accounts.length} доступно</span></div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    let currentFilterGlobal = "all";
+    let searchTimeout = null;
+
+    function setupFiltersAndSearch() {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentFilterGlobal = btn.dataset.filter;
+                document.querySelectorAll('.filter-btn').forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+                const searchVal = document.getElementById('searchInput').value;
+                renderGamesUI(searchVal, currentFilterGlobal);
+            });
+        });
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                if (searchTimeout) clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    renderGamesUI(e.target.value, currentFilterGlobal);
+                }, 200);
+            });
+        }
+    }
+
+    function openModal(gameId) {
+        const game = games.find(g => g.id === gameId);
+        if (!game) return;
+        document.getElementById('modalTitle').innerText = game.title;
+        const container = document.getElementById('modalAccounts');
+        if (!game.accounts || game.accounts.length === 0) {
+            container.innerHTML = `<div style="text-align:center;padding:2rem;">⚠️ Нет добавленных аккаунтов.</div>`;
+        } else {
+            container.innerHTML = game.accounts.map((acc, idx) => {
+                return `
+                    <div class="account-card">
+                        <div><strong>Аккаунт #${idx+1}</strong></div>
+                        <div style="margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+                            <i class="fas fa-lock"></i> Данные скрыты
+                        </div>
+                        <button class="get-telegram-btn" onclick="redirectToTelegram()">
+                            <i class="fab fa-telegram-plane"></i> Получить данные в Telegram
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        document.getElementById('gameModal').classList.add('active');
+        document.body.style.overflow = "hidden";
+    }
+
+    // Функция перехода в Telegram по точной ссылке
+    function redirectToTelegram() {
+        window.open('https://t.me/ReadyPIay', '_blank');
+        showToast("🔓 Переход в Telegram — получите логин и пароль");
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.innerText = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function closeModal() { 
+        document.getElementById('gameModal').classList.remove('active');
+        document.body.style.overflow = "";
+    }
+
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, function(m){
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function scrollToTop() { 
+        window.scrollTo({top:0, behavior:'smooth'});
+        document.getElementById('navHome').classList.add('active');
+        document.getElementById('navCatalog').classList.remove('active');
+    }
+
+    function scrollToCatalog() { 
+        window.scrollTo({top:0, behavior:'smooth'});
+        document.getElementById('navHome').classList.remove('active');
+        document.getElementById('navCatalog').classList.add('active');
+    }
+
+    // Инициализация
+    updateStats();
+    setupFiltersAndSearch();
+    renderGamesUI("", "all");
+
+    document.getElementById('gameModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('gameModal')) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    setTimeout(() => {
+        document.getElementById("loader").classList.add("hidden");
+    }, 800);
+
+    window.closeModal = closeModal;
+    window.scrollToTop = scrollToTop;
+    window.scrollToCatalog = scrollToCatalog;
+    window.openModal = openModal;
+    window.redirectToTelegram = redirectToTelegram;
+</script>
+</body>
+</html>
+```
