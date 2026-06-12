@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ReadyPlay — Премиальные игровые аккаунты</title>
+    <title>ReadyPlay — Бесплатные игровые аккаунты</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -16,71 +16,137 @@
         }
 
         :root {
-            --bg-deep: #05050A;
-            --bg-elevated: #0C0C14;
-            --bg-card: rgba(18, 18, 28, 0.7);
-            --bg-card-solid: #12121C;
-            --border-gold: rgba(212, 175, 55, 0.35);
-            --border-glow: rgba(212, 175, 55, 0.5);
-            --gold: #D4AF37;
-            --gold-light: #F5E18C;
-            --gold-dark: #997A00;
+            --bg-primary: #0A0A0F;
+            --bg-secondary: #111118;
+            --bg-card: #1A1A24;
+            --bg-card-hover: #22222E;
+            --border-color: #2A2A35;
+            --accent: #FF3B3B;
+            --accent-dark: #CC2A2A;
+            --accent-glow: rgba(255, 59, 59, 0.3);
             --text-primary: #FFFFFF;
             --text-secondary: #A0A0B0;
-            --text-dim: #6E6E82;
-            --success: #00D26A;
-            --accent-red: #FF3A3A;
+            --text-muted: #6A6A78;
+            --success: #00E5A0;
+            --warning: #FFB800;
+            --telegram: #27A0D9;
+            --support: #FFD700;
+            --gradient-1: linear-gradient(135deg, #FF3B3B, #8B0000);
+            --gradient-2: linear-gradient(135deg, #00E5A0, #008B5E);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 40px rgba(255,59,59,0.2);
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            background: var(--bg-deep);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.5;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Premium Grain Texture */
-        body::before {
-            content: '';
+        .animated-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=');
-            background-repeat: repeat;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Animated Gradient Background */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
-            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08), transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05), transparent 60%),
-                        var(--bg-deep);
+            overflow: hidden;
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,59,59,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0,229,160,0.05) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-10%, -10%); }
+        }
+
+        .loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .loader-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            text-align: center;
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: var(--shadow-glow);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .loader-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
         }
 
         header {
-            background: rgba(5, 5, 10, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-gold);
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 1rem 0;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .header-content {
-            max-width: 1400px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -89,197 +155,237 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            object-fit: cover;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', monospace;
             font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            font-weight: 800;
+            background: var(--gradient-1);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-decoration: none;
-            letter-spacing: -0.5px;
         }
 
-        .logo i {
+        .logo-text span {
             background: none;
-            color: var(--gold);
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: white;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: 0.3s;
-            letter-spacing: 0.3px;
+            transition: all 0.3s;
             cursor: pointer;
+            position: relative;
+            padding: 0.5rem 0.8rem;
+            border-radius: 10px;
         }
 
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--gold);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .donate-btn {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid var(--support);
+            color: var(--support) !important;
+        }
+
+        .donate-btn i {
+            margin-right: 0.3rem;
+        }
+
+        .donate-btn:hover {
+            background: var(--support);
+            color: #0A0A0F !important;
         }
 
         .btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 100px;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
             border: none;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
+            font-family: inherit;
+            font-size: 0.8rem;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--bg-deep);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-            filter: brightness(1.05);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
+        .btn-telegram {
+            background: var(--telegram);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
         }
 
-        .btn-outline:hover {
-            background: rgba(212, 175, 55, 0.1);
+        .btn-telegram:hover {
+            background: #1e8bc8;
             transform: translateY(-2px);
-        }
-
-        .theme-toggle {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 100px;
-            padding: 0.4rem 1rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: 0.3s;
-        }
-
-        .theme-toggle:hover {
-            border-color: var(--gold);
-            color: var(--gold);
+            box-shadow: 0 4px 12px rgba(39, 160, 217, 0.3);
         }
 
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 5rem 2rem 3rem;
             position: relative;
         }
 
         .hero-badge {
-            display: inline-block;
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid var(--border-gold);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,59,59,0.1);
+            border: 1px solid rgba(255,59,59,0.3);
             border-radius: 100px;
-            padding: 0.3rem 1rem;
+            padding: 0.4rem 1.2rem;
             font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
             margin-bottom: 1.5rem;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFFFFF, var(--gold-light));
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-gradient {
+            background: var(--gradient-1);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
         }
 
-        .hero-stats {
+        .hero-sub {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
             display: flex;
             justify-content: center;
-            gap: 2.5rem;
+            gap: 2rem;
             flex-wrap: wrap;
             margin-top: 2rem;
         }
 
-        .stat-item {
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(10px);
-            padding: 0.6rem 1.8rem;
-            border-radius: 100px;
-            border: 1px solid rgba(212,175,55,0.2);
-            font-weight: 500;
-        }
-
-        .stat-item i {
-            color: var(--gold);
-            margin-right: 0.5rem;
-        }
-
-        .top-week {
+        .stat-card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 1.8rem;
-            margin-bottom: 2.5rem;
-            border: 1px solid var(--border-gold);
-            transition: 0.3s;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
         }
 
-        .top-week h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.3px;
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            font-family: 'Orbitron', monospace;
         }
 
-        .top-week h3 i {
-            color: var(--gold);
-            margin-right: 0.5rem;
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
-        .top-games-list {
-            display: flex;
-            gap: 1.2rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
         }
 
-        .top-game-item {
-            min-width: 170px;
-            background: var(--bg-card-solid);
-            border-radius: 24px;
-            padding: 1.2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid rgba(212,175,55,0.1);
+        .search-box {
+            position: relative;
+            width: 100%;
         }
 
-        .top-game-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--gold);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-
-        .search-section {
-            max-width: 500px;
-            margin: 1.5rem auto;
+        .search-box i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            z-index: 2;
+            pointer-events: none;
         }
 
         .search-input {
             width: 100%;
-            padding: 1rem 1.2rem 1rem 3rem;
+            padding: 1rem 1rem 1rem 3rem;
             background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212,175,55,0.25);
-            border-radius: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
             color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s;
@@ -287,35 +393,70 @@
 
         .search-input:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
         }
 
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .game-card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(212,175,55,0.2);
+            border: 1px solid var(--border-color);
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             cursor: pointer;
+            animation: fadeInUp 0.6s ease backwards;
         }
 
         .game-card:hover {
             transform: translateY(-8px);
-            border-color: var(--gold);
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.3);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .game-image {
-            height: 180px;
+            height: 200px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -325,601 +466,231 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, var(--bg-deep), transparent 60%);
+            background: linear-gradient(to top, var(--bg-primary), transparent);
         }
 
         .game-badge {
             position: absolute;
             bottom: 12px;
             right: 12px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--bg-deep);
-            padding: 0.2rem 0.8rem;
-            border-radius: 100px;
+            background: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
             font-size: 0.7rem;
             font-weight: 700;
-            z-index: 2;
+            z-index: 1;
         }
 
         .game-info {
             padding: 1.2rem;
         }
 
-        .game-info h3 {
+        .game-title {
             font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
         }
 
-        .rating-summary {
+        .game-stats {
             display: flex;
             gap: 1rem;
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
             font-size: 0.8rem;
-            color: var(--text-dim);
+            color: var(--text-secondary);
         }
 
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(5,5,10,0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            overflow-y: auto;
             padding: 2rem;
+            animation: fadeIn 0.3s;
         }
 
         .modal.active {
             display: flex;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
-            background: var(--bg-elevated);
-            max-width: 850px;
+            max-width: 900px;
             width: 100%;
-            border-radius: 40px;
-            border: 1px solid var(--border-gold);
             max-height: 85vh;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
             overflow-y: auto;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+            animation: slideUp 0.4s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
-            padding: 1.8rem;
-            border-bottom: 1px solid rgba(212,175,55,0.2);
-            position: relative;
-        }
-
-        .trailer-container iframe {
-            width: 100%;
-            height: 280px;
-            border: none;
-            border-radius: 20px;
-        }
-
-        .screenshots {
-            display: flex;
-            gap: 1rem;
-            overflow-x: auto;
-            margin: 1.2rem 0;
-        }
-
-        .screenshot {
-            width: 200px;
-            height: 120px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 16px;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid rgba(212,175,55,0.3);
-        }
-
-        .screenshot:hover {
-            transform: scale(1.02);
-            border-color: var(--gold);
-        }
-
-        .rating-inline {
-            display: flex;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .rating-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(212,175,55,0.3);
-            padding: 0.5rem 1.2rem;
-            border-radius: 100px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 500;
-        }
-
-        .rating-btn:hover {
-            border-color: var(--gold);
-        }
-
-        .rating-btn.active-up {
-            background: var(--success);
-            border-color: var(--success);
-            color: white;
-        }
-
-        .rating-btn.active-down {
-            background: var(--accent-red);
-            border-color: var(--accent-red);
-            color: white;
-        }
-
-        .account-item {
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 1rem;
-            padding: 1.2rem;
-            border-radius: 24px;
-            border: 1px solid rgba(212,175,55,0.15);
-            transition: 0.2s;
-        }
-
-        .profile-panel {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 1.8rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-gold);
-        }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--gold);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .subscriptions-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
-
-        .sub-badge {
-            background: rgba(212,175,55,0.1);
-            border: 1px solid var(--border-gold);
-            padding: 0.4rem 1rem;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .qr-section {
-            text-align: center;
             padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            border: 1px solid var(--border-gold);
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .account-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .account-card:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .get-telegram-btn {
+            background: var(--telegram);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .get-telegram-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .get-telegram-btn:hover {
+            background: #1e8bc8;
+            transform: translateY(-2px);
         }
 
         .toast {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            background: var(--bg-card-solid);
-            backdrop-filter: blur(16px);
-            border-left: 4px solid var(--gold);
-            padding: 0.8rem 1.8rem;
-            border-radius: 100px;
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
             transform: translateX(150%);
-            transition: 0.3s;
+            transition: transform 0.3s;
             z-index: 1100;
-            font-weight: 500;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-lg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .toast.show {
+            transform: translateX(0);
         }
 
         footer {
             text-align: center;
             padding: 2rem;
-            border-top: 1px solid rgba(212,175,55,0.15);
+            border-top: 1px solid var(--border-color);
             margin-top: 3rem;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 700px) {
-            .header-content { flex-direction: column; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .hero h1 { font-size: 2.2rem; }
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
-<div class="bg-glow"></div>
 
-<header>
-    <div class="header-content">
-        <a href="#" class="logo" onclick="showHome()"><i class="fas fa-crown"></i> ReadyPlay</a>
-        <ul class="nav-links">
-            <li><a onclick="showHome()" id="navHome">Главная</a></li>
-            <li><a onclick="showProfile()" id="navProfile">👤 Профиль</a></li>
-        </ul>
-        <div style="display: flex; gap: 0.8rem;">
-            <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i> Тема</button>
-        </div>
-    </div>
-</header>
+<div class="animated-bg"></div>
 
-<section class="hero" id="heroSection">
-    <div class="hero-badge"><i class="fas fa-gem"></i> Премиум доступ</div>
-    <h1>Готовые аккаунты<br>для настоящих геймеров</h1>
-    <div class="hero-stats">
-        <div class="stat-item"><i class="fas fa-key"></i> <strong id="totalAccounts">0</strong> аккаунтов</div>
-        <div class="stat-item"><i class="fas fa-gamepad"></i> <strong id="totalGames">0</strong> игр</div>
-        <div class="stat-item"><i class="fas fa-bell"></i> Подпишись на новинки</div>
-    </div>
-</section>
-
-<main style="max-width: 1400px; margin: 0 auto; padding: 0 2rem 2rem;">
-    <div class="top-week" id="topWeekSection">
-        <h3><i class="fas fa-trophy"></i> Топ недели</h3>
-        <div class="top-games-list" id="topGamesList"></div>
-    </div>
-
-    <div id="profileSection" style="display: none;">
-        <div class="profile-panel">
-            <h3><i class="fas fa-user-astronaut"></i> Мой профиль</h3>
-            <div class="avatar-section" style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
-                <img id="profileAvatar" class="avatar" src="https://ui-avatars.com/api/?background=D4AF37&color=000&name=User">
-                <div>
-                    <input type="text" id="nicknameInput" placeholder="Никнейм" style="background: var(--bg-card-solid); border: 1px solid var(--border-gold); padding: 0.6rem 1rem; border-radius: 100px; color: var(--text-primary); width: 200px;">
-                    <button class="btn btn-primary" onclick="updateNickname()" style="margin-left: 0.5rem;">Сменить</button>
-                    <div style="margin-top: 0.8rem;">
-                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadAvatar(this)">
-                        <button class="btn btn-outline" onclick="document.getElementById('avatarUpload').click()"><i class="fas fa-camera"></i> Загрузить аватар</button>
-                    </div>
-                </div>
-            </div>
-            <p><strong>Оценок оставлено:</strong> <span id="profileRatings">0</span></p>
-        </div>
-
-        <div class="profile-panel">
-            <h3><i class="fas fa-bell"></i> Подписки на игры</h3>
-            <div id="subscriptionsList" class="subscriptions-list"></div>
-            <p style="margin-top: 0.8rem; font-size: 0.8rem; color: var(--text-dim);">Подпишись — новый аккаунт придёт с уведомлением!</p>
-        </div>
-
-        <div class="qr-section">
-            <h4><i class="fas fa-qrcode"></i> Мобильный вход</h4>
-            <div id="qrCode" style="width: 140px; height: 140px; margin: 1rem auto; background: white; display: flex; align-items: center; justify-content: center; border-radius: 20px;">
-                <i class="fas fa-qrcode" style="font-size: 70px; color: black;"></i>
-            </div>
-        </div>
-    </div>
-
-    <div id="homeSection">
-        <div class="search-section">
-            <div style="position: relative;">
-                <i class="fas fa-search" style="position: absolute; left: 1.2rem; top: 1rem; color: var(--gold);"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск игр...">
-            </div>
-        </div>
-        <div class="games-grid" id="gamesGrid"></div>
-    </div>
-</main>
-
-<div class="modal" id="gameModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="color: var(--gold); font-size: 1.8rem;">Игра</h2>
-            <button onclick="closeModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.05); border: none; border-radius: 100px; width: 36px; height: 36px; cursor: pointer; color: white;">✕</button>
-        </div>
-        <div style="padding: 1.8rem;">
-            <p id="gameDescription" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
-            <div class="trailer-container" id="gameTrailer"></div>
-                <div class="screenshots" id="gameScreenshots"></div>
-            <div class="rating-inline">
-                <button class="rating-btn" id="likeBtn" onclick="rateGameInModal('like')">👍 <span id="likesCount">0</span></button>
-                <button class="rating-btn" id="dislikeBtn" onclick="rateGameInModal('dislike')">👎 <span id="dislikesCount">0</span></button>
-                <button class="rating-btn" id="subscribeBtn" onclick="toggleSubscribe()">🔔 Подписаться</button>
-            </div>
-            <h4><i class="fas fa-key" style="color: var(--gold);"></i> Доступные аккаунты</h4>
-            <div id="modalAccountsList"></div>
-        </div>
+<div class="loader-wrapper" id="loader">
+    <div class="loader">
+        <img class="loader-logo" src="https://raw.githubusercontent.com/Stintik-123/ReadyPlay/main/1000008024%20(1).jpg" alt="ReadyPlay Logo" onerror="this.src='https://via.placeholder.com/120x120?text=RP'">
+        <div class="loader-text">READYPLAY</div>
     </div>
 </div>
 
-<div id="toast" class="toast"></div>
+<header>
+    <div class="header-content">
+        <div class="logo" onclick="scrollToTop()">
+            <img class="logo-img" src="https://raw.githubusercontent.com/Stintik-123/ReadyPlay/main/1000008024%20(1).jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/48x48?text=RP'">
+            <div class="logo-text">READY<span>PLAY</span></div>
+        </div>
+        <ul class="nav-links">
+            <li><a onclick="scrollToTop()" id="navHome" class="active">Главная</a></li>
+            <li><a onclick="scrollToCatalog()" id="navCatalog">Каталог</a></li>
+            <li><a href="https://t.me/ReadyPlay_Help" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 0.4rem;"><i class="fab fa-telegram-plane"></i> Поддержка</a></li>
+            <li><a href="https://dalink.to/readyplay_" target="_blank" rel="noopener noreferrer" class="donate-btn"><i class="fas fa-heart"></i> Поддержать</a></li>
+        </ul>
+    </div>
+</header>
 
-<script>
-    let gamesStore = [];
-    let currentGameId = null;
-    let currentUser = { name: "Игрок", avatar: null, ratings: {}, subscriptions: [] };
-
-    function loadUserData() {
-        let saved = localStorage.getItem('readyplay_user');
-        if(saved) {
-            try {
-                let data = JSON.parse(saved);
-                currentUser = data;
-                if(!currentUser.subscriptions) currentUser.subscriptions = [];
-                if(!currentUser.ratings) currentUser.ratings = {};
-                document.getElementById('nicknameInput').value = currentUser.name || "Игрок";
-                document.getElementById('profileRatings').innerText = Object.keys(currentUser.ratings || {}).length;
-                if(currentUser.avatar) {
-                    document.getElementById('profileAvatar').src = currentUser.avatar;
-                } else {
-                    document.getElementById('profileAvatar').src = `https://ui-avatars.com/api/?background=D4AF37&color=000&name=${encodeURIComponent(currentUser.name || "User")}`;
-                }
-                updateSubscriptionsUI();
-            } catch(e) {}
-        }
-    }
-
-    function saveUserData() {
-        localStorage.setItem('readyplay_user', JSON.stringify(currentUser));
-        document.getElementById('profileRatings').innerText = Object.keys(currentUser.ratings || {}).length;
-        updateSubscriptionsUI();
-    }
-
-    function updateSubscriptionsUI() {
-        let container = document.getElementById('subscriptionsList');
-        if(!container) return;
-        let subs = currentUser.subscriptions || [];
-        if(subs.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-dim);">Нет подписок. Открой игру и нажми "Подписаться"</p>';
-            return;
-        }
-        container.innerHTML = subs.map(gameId => {
-            let game = gamesStore.find(g => g.id == gameId);
-            return `<div class="sub-badge">${game ? game.title : 'Игра'} <button onclick="unsubscribeGame(${gameId})" style="background: none; border: none; color: var(--gold); cursor: pointer;">✕</button></div>`;
-        }).join('');
-    }
-
-    function unsubscribeGame(gameId) {
-        currentUser.subscriptions = currentUser.subscriptions.filter(id => id != gameId);
-        saveUserData();
-        showToast("Отписались от уведомлений");
-        if(currentGameId == gameId) {
-            let subBtn = document.getElementById('subscribeBtn');
-            if(subBtn) subBtn.innerHTML = '🔔 Подписаться';
-        }
-    }
-
-    function checkNewAccountsAndNotify() {
-        let lastCheck = localStorage.getItem('readyplay_last_check') || '{}';
-        try { lastCheck = JSON.parse(lastCheck); } catch(e) { lastCheck = {}; }
-        for(let game of gamesStore) {
-            let prevCount = lastCheck[game.id] || 0;
-            if(game.accountsList.length > prevCount && prevCount !== 0) {
-                if(currentUser.subscriptions && currentUser.subscriptions.includes(game.id)) {
-                    showToast(`✨ Новый аккаунт в ${game.title}! Забери скорее!`);
-                }
-            }
-            lastCheck[game.id] = game.accountsList.length;
-        }
-        localStorage.setItem('readyplay_last_check', JSON.stringify(lastCheck));
-    }
-
-    window.updateNickname = () => {
-        let newName = document.getElementById('nicknameInput').value.trim();
-        if(newName) {
-            currentUser.name = newName;
-            saveUserData();
-            showToast(`Никнейм изменён на ${newName}`);
-        }
-    };
-
-    window.uploadAvatar = (input) => {
-        let file = input.files[0];
-        if(file) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                currentUser.avatar = e.target.result;
-                document.getElementById('profileAvatar').src = e.target.result;
-                saveUserData();
-                showToast("Аватар обновлён");
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    function initGames() {
-        gamesStore = [
-            { id: 1, title: "Cyberpunk 2077", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg", description: "Наёмник Ви в мегаполисе будущего Night City. Киберпанк, свобода и модификации.", trailer: "qIcTM8WXFjk", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/ss_1d2d1e2f8e6b0f6c5b0e1f9c7a8b3c2d.jpg", "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/ss_2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d.jpg"], accountsList: [{login:"cyber_v", password:"nightcity2077"}], likes: 156, dislikes: 23 },
-            { id: 2, title: "The Witcher 3", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg", description: "Эпичное фэнтези. Геральт из Ривии ищет Цири.", trailer: "c0i88t0KZmw", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/ss_1a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d.jpg"], accountsList: [{login:"geralt", password:"wildhunt123"},{login:"yennefer", password:"lilac78"}], likes: 234, dislikes: 12 },
-            { id: 3, title: "Elden Ring", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg", description: "Фэнтезийный экшен от FromSoftware. Исследуйте Междуземье.", trailer: "E3Huy2cdih0", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/ss_1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a.jpg"], accountsList: [{login:"tarnished", password:"maidenless"}], likes: 198, dislikes: 8 },
-            { id: 4, title: "Red Dead Redemption 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg", description: "Дикий Запад, банда Ван дер Линде. История Артура Моргана.", trailer: "gmA6MrX81z4", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/ss_1a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d.jpg"], accountsList: [{login:"arthur", password:"tahiti99"}], likes: 312, dislikes: 15 },
-            { id: 5, title: "GTA V", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg", description: "Лос-Сантос, три истории преступников.", trailer: "QkkoHAzGjRo", screenshots: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/ss_1d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a.jpg"], accountsList: [{login:"franklin", password:"grove123"}], likes: 421, dislikes: 32 }
-        ];
-        updateStats();
-        renderTopGames();
-        renderGames();
-        checkNewAccountsAndNotify();
-    }
-
-    function updateStats() {
-        let totalAcc = gamesStore.reduce((s,g) => s + g.accountsList.length, 0);
-        document.getElementById('totalAccounts').innerText = totalAcc;
-        document.getElementById('totalGames').innerText = gamesStore.length;
-    }
-
-    function renderTopGames() {
-        let sorted = [...gamesStore].sort((a,b) => (b.likes - b.dislikes) - (a.likes - a.dislikes)).slice(0, 5);
-        let container = document.getElementById('topGamesList');
-        container.innerHTML = sorted.map(game => `
-            <div class="top-game-item" onclick="openGameModal(${game.id})">
-                <div style="font-size: 2rem;">🏆</div>
-                <strong>${game.title}</strong>
-                <div style="font-size:0.75rem; color: var(--gold);">⭐ ${game.likes - game.dislikes}</div>
+<main style="max-width: 1440px; margin: 0 auto; padding: 0 2rem 3rem;">
+    <div id="catalogContent">
+        <div class="hero">
+            <div class="hero-badge">
+                <i class="fas fa-bolt"></i> Бесплатные аккаунты с играми
             </div>
-        `).join('');
-    }
-
-    function renderGames() {
-        let search = document.getElementById('searchInput')?.value.toLowerCase() || '';
-        let filtered = gamesStore.filter(g => g.title.toLowerCase().includes(search));
-        const grid = document.getElementById('gamesGrid');
-        grid.innerHTML = filtered.map(game => `
-            <div class="game-card" onclick="openGameModal(${game.id})">
-                <div class="game-image" style="background-image: url('${game.poster}');">
-                    <div class="game-badge">${game.accountsList.length} аккаунтов</div>
+            <h1>ПРЕМИУМ АККАУНТЫ<br>ДЛЯ <span class="hero-gradient">НАСТОЯЩИХ</span><br>ГЕЙМЕРОВ</h1>
+            <p class="hero-sub">Проверенные аккаунты для топ-игр. Бесплатно, быстро, безопасно. Нажми на игру → получи логин/пароль → играй в Steam.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAccountsStat">0</div>
+                    <div class="stat-label">Аккаунтов</div>
                 </div>
-                <div class="game-info">
-                    <h3>${game.title}</h3>
-                    <div class="rating-summary">👍 ${game.likes} · 👎 ${game.dislikes}</div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalGamesStat">0</div>
+                    <div class="stat-label">Игр</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Доступность</div>
                 </div>
             </div>
-        `).join('');
-    }
+            <div style="margin-top: 2rem;">
+                <a href="https://t.me/ReadyPlay_Help" target="_blank" rel="noopener noreferrer" class="btn-telegram">
+                    <i class="fab fa-telegram-plane"></i> Поддержка в Telegram
+                </a>
+            </div>
+        </div>
 
-    window.openGameModal = (id) => {
-        currentGameId = id;
-        let game = gamesStore.find(g => g.id === id);
-        if(!game) return;
-        document.getElementById('modalTitle').innerText = game.title;
-        document.getElementById('gameDescription').innerText = game.description;
-        document.getElementById('gameTrailer').innerHTML = `<iframe src="https://www.youtube.com/embed/${game.trailer}?autoplay=0&rel=0" allowfullscreen></iframe>`;
-        document.getElementById('gameScreenshots').innerHTML = game.screenshots.map(url => `<div class="screenshot" style="background-image: url('${url}');" onclick="window.open('${url}', '_blank')"></div>`).join('');
-        document.getElementById('likesCount').innerText = game.likes;
-        document.getElementById('dislikesCount').innerText = game.dislikes;
-        
-        let userRating = currentUser.ratings?.[id];
-        let likeBtn = document.getElementById('likeBtn');
-        let dislikeBtn = document.getElementById('dislikeBtn');
-        likeBtn.classList.remove('active-up');
-        dislikeBtn.classList.remove('active-down');
-        if(userRating === 'like') likeBtn.classList.add('active-up');
-        if(userRating === 'dislike') dislikeBtn.classList.add('active-down');
-        
-        let subBtn = document.getElementById('subscribeBtn');
-        if(currentUser.subscriptions && currentUser.subscriptions.includes(id)) {
-            subBtn.innerHTML = '🔔 Отписаться';
-            subBtn.style.background = 'rgba(212,175,55,0.2)';
-        } else {
-            subBtn.innerHTML = '🔔 Подписаться';
-            subBtn.style.background = 'rgba(255,255,255,0.05)';
-        }
-        
-        let accountsHtml = '';
-        game.accountsList.forEach((acc, idx) => {
-            accountsHtml += `
-                <div class="account-item">
-                    <div><strong>Аккаунт #${idx+1}</strong></div>
-                    <div id="creds-${id}-${idx}" style="display: none; margin-top: 12px;">
-                        <i class="fas fa-user"></i> ${acc.login}<br>
-                        <i class="fas fa-lock"></i> ${acc.password}
-                    </div>
-                    <button class="btn btn-outline" style="margin-top: 10px;" onclick="document.getElementById('creds-${id}-${idx}').style.display='block'">🔓 Показать данные</button>
-                    <button class="btn btn-primary" style="margin-top: 10px; margin-left: 8px;" onclick="copyText('${acc.login}:${acc.password}')">📋 Копировать</button>
-                </div>
-            `;
-        });
-        if(game.accountsList.length === 0) accountsHtml = '<p style="color: var(--text-dim);">Нет доступных аккаунтов</p>';
-        document.getElementById('modalAccountsList').innerHTML = accountsHtml;
-        document.getElementById('gameModal').classList.add('active');
-    };
-
-    window.toggleSubscribe = () => {
-        if(!currentGameId) return;
-        let game = gamesStore.find(g => g.id === currentGameId);
-        if(!currentUser.subscriptions) currentUser.subscriptions = [];
-        let index = currentUser.subscriptions.indexOf(currentGameId);
-        if(index === -1) {
-            currentUser.subscriptions.push(currentGameId);
-            saveUserData();
-            showToast(`Вы подписались на ${game.title}`);
-            document.getElementById('subscribeBtn').innerHTML = '🔔 Отписаться';
-        } else {
-            currentUser.subscriptions.splice(index, 1);
-            saveUserData();
-            showToast(`Отписка от ${game.title}`);
-            document.getElementById('subscribeBtn').innerHTML = '🔔 Подписаться';
-        }
-        updateSubscriptionsUI();
-    };
-
-    window.rateGameInModal = (type) => {
-        let game = gamesStore.find(g => g.id === currentGameId);
-        if(!game) return;
-        let oldRating = currentUser.ratings?.[currentGameId];
-        if(oldRating === 'like') game.likes--;
-        if(oldRating === 'dislike') game.dislikes--;
-        if(type === 'like') {
-            if(oldRating !== 'like') { game.likes++; currentUser.ratings[currentGameId] = 'like'; }
-            else { delete currentUser.ratings[currentGameId]; }
-        } else {
-            if(oldRating !== 'dislike') { game.dislikes++; currentUser.ratings[currentGameId] = 'dislike'; }
-            else { delete currentUser.ratings[currentGameId]; }
-        }
-        document.getElementById('likesCount').innerText = game.likes;
-        document.getElementById('dislikesCount').innerText = game.dislikes;
-        let likeBtn = document.getElementById('likeBtn');
-        let dislikeBtn = document.getElementById('dislikeBtn');
-        likeBtn.classList.remove('active-up');
-        dislikeBtn.classList.remove('active-down');
-        if(currentUser.ratings[currentGameId] === 'like') likeBtn.classList.add('active-up');
-        if(currentUser.ratings[currentGameId] === 'dislike') dislikeBtn.classList.add('active-down');
-        saveUserData();
-        updateStats();
-        renderTopGames();
-        renderGames();
-        showToast(`Оценка принята`);
-    };
-
-    window.copyText = (text) => { navigator.clipboard.writeText(text); showToast("Скопировано!"); };
-    window.showHome = () => {
-        document.getElementById('homeSection').style.display = 'block';
-        document.getElementById('profileSection').style.display = 'none';
-        document.getElementById('heroSection').style.display = 'block';
-        document.getElementById('topWeekSection').style.display = 'block';
-        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-        document.getElementById('navHome').classList.add('active');
-        renderGames();
-    };
-    window.showProfile = () => {
-        document.getElementById('homeSection').style.display = 'none';
-        document.getElementById('profileSection').style.display = 'block';
-        document.getElementById('heroSection').style.display = 'none';
-        document.getElementById('topWeekSection').style.display = 'none';
-        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-        document.getElementById('navProfile').classList.add('active');
-        loadUserData();
-    };
-    window.toggleTheme = () => {
-        let isLight = document.body.classList.toggle('light');
-        let theme = isLight ? 'light' : 'dark';
-        localStorage.setItem('readyplay_theme', theme);
-        showToast(theme === 'light' ? 'Светлая тема' : 'Тёмная тема');
-    };
-    function showToast(msg) {
-        let toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.style.transform = 'translateX(0)';
-        setTimeout(() => toast.style.transform = 'translateX(150%)', 2500);
-    }
-    window.closeModal = () => { document.getElementById('gameModal').classList.remove('active'); currentGameId = null; };
-    if(document.getElementById('searchInput')) document.getElementById('searchInput').addEventListener('input', () => renderGames());
-    let savedTheme = localStorage.getItem('readyplay_theme');
-    if(savedTheme === 'light') document.body.classList.add('light');
-    loadUserData();
-    initGames();
-    document.getElementById('navHome').classList.add('active');
-    document.getElementById('gameModal').addEventListener('click', (e) => { if(e.target === document.getElementById('gameModal')) closeModal(); });
-    setInterval(() => { checkNewAccountsAndNotify(); }, 30000);
-</script>
-
-<footer>
-    <p>ReadyPlay — премиальные игровые аккаунты. Подписывайся и получай доступ первым.</p>
-</footer>
-</body>
-</html>
-```
+        <div class="search-container">
+            <div 
