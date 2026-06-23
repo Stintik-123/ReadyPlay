@@ -2,913 +2,137 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ReadyPlay — Бесплатные игровые аккаунты</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0A0A0F;
-            --bg-secondary: #111118;
-            --bg-card: #1A1A24;
-            --bg-card-hover: #22222E;
-            --border-color: #2A2A35;
-            --accent: #FF3B3B;
-            --accent-dark: #CC2A2A;
-            --accent-glow: rgba(255, 59, 59, 0.3);
-            --text-primary: #FFFFFF;
-            --text-secondary: #A0A0B0;
-            --text-muted: #6A6A78;
-            --success: #00E5A0;
-            --warning: #FFB800;
-            --telegram: #27A0D9;
-            --support: #FFD700;
-            --gradient-1: linear-gradient(135deg, #FF3B3B, #8B0000);
-            --gradient-2: linear-gradient(135deg, #00E5A0, #008B5E);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
-            --shadow-glow: 0 0 40px rgba(255,59,59,0.2);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        .animated-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .animated-bg::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 20% 50%, rgba(255,59,59,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(0,229,160,0.05) 0%, transparent 50%);
-            animation: bgMove 20s ease-in-out infinite;
-        }
-
-        @keyframes bgMove {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-10%, -10%); }
-        }
-
-        .loader-wrapper {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-
-        .loader-wrapper.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader {
-            text-align: center;
-        }
-
-        .loader-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 24px;
-            object-fit: cover;
-            margin-bottom: 20px;
-            animation: pulse 1.5s ease-in-out infinite;
-            box-shadow: var(--shadow-glow);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        .loader-text {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: textPulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes textPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 10px;
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .header-content {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .logo-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            object-fit: cover;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .logo-text {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .logo-text span {
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            color: white;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            padding: 0.5rem 0.8rem;
-            border-radius: 10px;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: all 0.3s;
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--text-primary);
-            background: rgba(255,255,255,0.05);
-        }
-
-        .donate-btn {
-            background: rgba(255, 215, 0, 0.2);
-            border: 1px solid var(--support);
-            color: var(--support) !important;
-        }
-
-        .donate-btn i {
-            margin-right: 0.3rem;
-        }
-
-        .donate-btn:hover {
-            background: var(--support);
-            color: #0A0A0F !important;
-        }
-
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            font-family: inherit;
-            font-size: 0.8rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-telegram {
-            background: var(--telegram);
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .btn-telegram:hover {
-            background: #1e8bc8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(39, 160, 217, 0.3);
-        }
-
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem 3rem;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255,59,59,0.1);
-            border: 1px solid rgba(255,59,59,0.3);
-            border-radius: 100px;
-            padding: 0.4rem 1.2rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: clamp(2.5rem, 8vw, 5.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.2rem;
-        }
-
-        .hero-gradient {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero-sub {
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 2rem;
-            font-size: 1.1rem;
-        }
-
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            padding: 1rem 2rem;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent);
-            font-family: 'Orbitron', monospace;
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            position: relative;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 1.2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .filters {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1.2rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .filter-btn.active,
-        .filter-btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .game-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            cursor: pointer;
-            animation: fadeInUp 0.6s ease backwards;
-        }
-
-        .game-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow-lg), var(--shadow-glow);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .game-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .game-image::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, var(--bg-primary), transparent);
-        }
-
-        .game-badge {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: var(--accent);
-            padding: 0.3rem 0.8rem;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            z-index: 1;
-        }
-
-        .game-info {
-            padding: 1.2rem;
-        }
-
-        .game-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        .game-stats {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.8rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            max-width: 900px;
-            width: 100%;
-            max-height: 85vh;
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-            overflow-y: auto;
-            animation: slideUp 0.4s;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .modal-close:hover {
-            background: var(--accent);
-            color: white;
-            transform: rotate(90deg);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .account-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .account-card:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .get-telegram-btn {
-            background: var(--telegram);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin-top: 0.5rem;
-        }
-
-        .get-telegram-btn i {
-            margin-right: 0.5rem;
-        }
-
-        .get-telegram-btn:hover {
-            background: #1e8bc8;
-            transform: translateY(-2px);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--bg-card);
-            border-left: 3px solid var(--accent);
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            transform: translateX(150%);
-            transition: transform 0.3s;
-            z-index: 1100;
-            box-shadow: var(--shadow-lg);
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 3rem;
-            color: var(--text-secondary);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEUROGENE — Расшифровка геймерского генома</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Канвас для частиц -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Фоновый шум -->
+    <div class="noise-overlay"></div>
 
-<div class="animated-bg"></div>
-
-<div class="loader-wrapper" id="loader">
-    <div class="loader">
-        <img class="loader-logo" src="https://raw.githubusercontent.com/Stintik-123/ReadyPlay/main/1000008024%20(1).jpg" alt="ReadyPlay Logo" onerror="this.src='https://via.placeholder.com/120x120?text=RP'">
-        <div class="loader-text">READYPLAY</div>
-    </div>
-</div>
-
-<header>
-    <div class="header-content">
-        <div class="logo" onclick="scrollToTop()">
-            <img class="logo-img" src="https://raw.githubusercontent.com/Stintik-123/ReadyPlay/main/1000008024%20(1).jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/48x48?text=RP'">
-            <div class="logo-text">READY<span>PLAY</span></div>
-        </div>
-        <ul class="nav-links">
-            <li><a onclick="scrollToTop()" id="navHome" class="active">Главная</a></li>
-            <li><a onclick="scrollToCatalog()" id="navCatalog">Каталог</a></li>
-            <li><a href="https://t.me/ReadyPlay_Help" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; gap: 0.4rem;"><i class="fab fa-telegram-plane"></i> Поддержка</a></li>
-            <li><a href="https://dalink.to/readyplay_" target="_blank" rel="noopener noreferrer" class="donate-btn"><i class="fas fa-heart"></i> Поддержать</a></li>
-        </ul>
-    </div>
-</header>
-
-<main style="max-width: 1440px; margin: 0 auto; padding: 0 2rem 3rem;">
-    <div id="catalogContent">
-        <div class="hero">
-            <div class="hero-badge">
-                <i class="fas fa-bolt"></i> Бесплатные аккаунты с играми
-            </div>
-            <h1>ПРЕМИУМ АККАУНТЫ<br>ДЛЯ <span class="hero-gradient">НАСТОЯЩИХ</span><br>ГЕЙМЕРОВ</h1>
-            <p class="hero-sub">Проверенные аккаунты для топ-игр. Бесплатно, быстро, безопасно. Нажми на игру → получи логин/пароль → играй в Steam.</p>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalAccountsStat">0</div>
-                    <div class="stat-label">Аккаунтов</div>
+    <!-- Основной контейнер -->
+    <div class="main-container">
+        
+        <!-- ЭКРАН 0: ПРЕЛОАДЕР -->
+        <div id="screen-preloader" class="screen active">
+            <div class="preloader-content">
+                <div class="dna-loader">
+                    <div class="strand strand-1"></div>
+                    <div class="strand strand-2"></div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalGamesStat">0</div>
-                    <div class="stat-label">Игр</div>
+                <p class="preloader-text glitch-text">Инициализация нейроинтерфейса...</p>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 1: ГЛАВНАЯ -->
+        <div id="screen-start" class="screen">
+            <div class="hero-section">
+                <div class="logo-container">
+                    <canvas id="dna-canvas" width="200" height="200"></canvas>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">Доступность</div>
-                </div>
-            </div>
-            <div style="margin-top: 2rem;">
-                <a href="https://t.me/ReadyPlay_Help" target="_blank" rel="noopener noreferrer" class="btn-telegram">
-                    <i class="fab fa-telegram-plane"></i> Поддержка в Telegram
-                </a>
-            </div>
-        </div>
-
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск игр...">
-            </div>
-        </div>
-
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">Все игры</button>
-            <button class="filter-btn" data-filter="available">Доступные (есть акки)</button>
-            <button class="filter-btn" data-filter="popular">Популярные (≥3 аккаунтов)</button>
-        </div>
-
-        <div class="games-grid" id="gamesGrid"></div>
-    </div>
-</main>
-
-<!-- Модалка игры -->
-<div class="modal" id="gameModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="color: var(--accent);">Название игры</h2>
-            <button class="modal-close" onclick="closeModal()">✕</button>
-        </div>
-        <div class="modal-body">
-            <h4><i class="fas fa-key"></i> Доступные аккаунты</h4>
-            <div id="modalAccounts"></div>
-            <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
-                <i class="fab fa-telegram"></i> Нажмите «Получить данные» — вы перейдёте в Telegram-бот для получения логина и пароля
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<footer>
-    <div class="logo-text" style="font-size: 1.5rem; margin-bottom: 0.5rem;">READY<span>PLAY</span></div>
-    <p>🔓 Все аккаунты предоставлены в ознакомительных целях. Не меняйте пароли, играйте честно.</p>
-    <p style="margin-top: 0.5rem;">© 2026 ReadyPlay — реальные данные, полная выдача логинов и паролей</p>
-</footer>
-
-<script>
-    // ---------------------------------------------------------------
-    // ВСЕ ИГРЫ И АККАУНТЫ ИЗ ПЕРВОГО ФАЙЛА (SteamShare)
-    // ---------------------------------------------------------------
-    let games = [
-        { id: 1, title: "Payday 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/218620/header.jpg", accounts: [{ login: "mwppm82372", password: "cpmrt70803" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 2, title: "Sons of the Forest", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1326470/header.jpg", accounts: [{ login: "mwppm82372", password: "cpmrt70803" }] },
-        { id: 3, title: "Subnautica", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg", accounts: [{ login: "hfsdfz", password: "xvdgfghfh" }] },
-        { id: 4, title: "Euro Truck Simulator 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/227300/header.jpg", accounts: [{ login: "ljtto83479", password: "DXPzyqv4Vkhp" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 5, title: "Garry's Mod", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4000/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
-        { id: 6, title: "Call of Duty: Black Ops II", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/202970/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
-        { id: 7, title: "Schedule I", poster: "https://avatars.mds.yandex.net/get-entity_search/5509992/1276468406/SUx182_2x", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
-        { id: 8, title: "Teardown", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1167630/0fb92d7a56cf3970f2f213ff5c7636a03251a407/header_alt_assets_6_russian.jpg?t=1781163092", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
-        { id: 9, title: "Geometry Dash", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/header.jpg", accounts: [{ login: "hkndc50876", password: "rjgks77171" }] },
-        { id: 10, title: "Atomic Heart", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/668580/header.jpg", accounts: [{ login: "bromasenun1976", password: "M7Fv81OzIY1978" }] },
-        { id: 11, title: "Metro Exodus", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/412020/header.jpg", accounts: [{ login: "bromasenun1976", password: "M7Fv81OzIY1978" }, { login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 12, title: "Half-Life 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 13, title: "Left 4 Dead 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/550/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 14, title: "Metro 2033", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/43110/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 15, title: "Metro 2033 Redux", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/286690/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 16, title: "Metro: Last Light Redux", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/287390/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 17, title: "Payday 3", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1272080/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 18, title: "Portal 2", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 19, title: "Car Mechanic Simulator 2021", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1190000/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 20, title: "Batman: Arkham Origins", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/209000/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 21, title: "Batman: Arkham Knight", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/208650/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 22, title: "Human: Fall Flat", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/477160/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 23, title: "Dead Island 2", poster: "https://avatars.mds.yandex.net/get-entity_search/5394189/1276347784/SUx182_2x", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] },
-        { id: 24, title: "The Sims 4", poster: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg", accounts: [{ login: "tmrgu23116", password: "https://funpay.com/users/9403227/" }] }
-    ];
-
-    function updateStats() {
-        let totalAccs = games.reduce((sum, g) => sum + (g.accounts?.length || 0), 0);
-        document.getElementById('totalAccountsStat').innerText = totalAccs;
-        document.getElementById('totalGamesStat').innerText = games.length;
-    }
-
-    function renderGamesUI(filterText = "", filterType = "all") {
-        let filtered = [...games];
-        if (filterType === "available") filtered = filtered.filter(g => g.accounts && g.accounts.length > 0);
-        if (filterType === "popular") filtered = filtered.filter(g => g.accounts && g.accounts.length >= 3);
-        if (filterText.trim() !== "") {
-            filtered = filtered.filter(g => g.title.toLowerCase().includes(filterText.toLowerCase()));
-        }
-        const grid = document.getElementById('gamesGrid');
-        if (filtered.length === 0) {
-            grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">🔍 Игры не найдены, попробуйте другой запрос.</div>`;
-            return;
-        }
-        grid.innerHTML = filtered.map(game => `
-            <div class="game-card" onclick="openModal(${game.id})">
-                <div class="game-image" style="background-image: url('${game.poster}'); background-size: cover; background-position: center;">
-                    <div class="game-badge"><i class="fas fa-key"></i> ${game.accounts.length} аккаунтов</div>
-                </div>
-                <div class="game-info">
-                    <div class="game-title">${escapeHtml(game.title)}</div>
-                    <div class="game-stats"><span><i class="fas fa-database"></i> ${game.accounts.length} доступно</span></div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    let currentFilterGlobal = "all";
-    let searchTimeout = null;
-
-    function setupFiltersAndSearch() {
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                currentFilterGlobal = btn.dataset.filter;
-                document.querySelectorAll('.filter-btn').forEach(t => t.classList.remove('active'));
-                btn.classList.add('active');
-                const searchVal = document.getElementById('searchInput').value;
-                renderGamesUI(searchVal, currentFilterGlobal);
-            });
-        });
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                if (searchTimeout) clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    renderGamesUI(e.target.value, currentFilterGlobal);
-                }, 200);
-            });
-        }
-    }
-
-    function openModal(gameId) {
-        const game = games.find(g => g.id === gameId);
-        if (!game) return;
-        document.getElementById('modalTitle').innerText = game.title;
-        const container = document.getElementById('modalAccounts');
-        if (!game.accounts || game.accounts.length === 0) {
-            container.innerHTML = `<div style="text-align:center;padding:2rem;">⚠️ Нет добавленных аккаунтов.</div>`;
-        } else {
-            container.innerHTML = game.accounts.map((acc, idx) => {
-                return `
-                    <div class="account-card">
-                        <div><strong>Аккаунт #${idx+1}</strong></div>
-                        <div style="margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
-                            <i class="fas fa-lock"></i> Данные скрыты
-                        </div>
-                        <button class="get-telegram-btn" onclick="redirectToTelegram()">
-                            <i class="fab fa-telegram-plane"></i> Получить данные в Telegram
-                        </button>
+                <h1 class="main-title">
+                    <span class="title-line glitch" data-text="NEUROGENE">NEUROGENE</span>
+                </h1>
+                <p class="hero-subtitle">Расшифруй свой геймерский геном</p>
+                <div class="divider"></div>
+                <p class="hero-description">
+                    Нейросеть проанализирует твои игровые решения,<br>
+                    определит скрытый архетип и подберёт<br>
+                    <span class="highlight">идеальные игры</span> для твоей ДНК.
+                </p>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-number" id="stat-questions">10</span>
+                        <span class="stat-label">Вопросов</span>
                     </div>
-                `;
-            }).join('');
-        }
-        document.getElementById('gameModal').classList.add('active');
-        document.body.style.overflow = "hidden";
-    }
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Архетипа</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Комбинаций</span>
+                    </div>
+                </div>
+                <button class="cta-btn" onclick="initiateTest()">
+                    <span class="btn-text">НАЧАТЬ РАСШИФРОВКУ</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </div>
+        </div>
 
-    // Функция перехода в Telegram по точной ссылке
-    function redirectToTelegram() {
-        window.open('https://t.me/ReadyPIay', '_blank');
-        showToast("🔓 Переход в Telegram — получите логин и пароль");
-    }
+        <!-- ЭКРАН 2: ТЕСТ -->
+        <div id="screen-test" class="screen">
+            <div class="test-header">
+                <div class="progress-container">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">1/10</span>
+                </div>
+                <div class="dna-mini" id="dna-mini"></div>
+            </div>
+            <div class="question-block">
+                <div class="question-number" id="question-number">Вопрос 1</div>
+                <h2 class="question-text" id="question-text"></h2>
+                <div class="answers-grid" id="answers-container"></div>
+            </div>
+        </div>
 
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        if (!toast) return;
-        toast.innerText = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
+        <!-- ЭКРАН 3: АНАЛИЗ -->
+        <div id="screen-analysis" class="screen">
+            <div class="analysis-scene">
+                <canvas id="analysis-canvas" width="300" height="300"></canvas>
+                <div class="analysis-text-container">
+                    <h2 class="analysis-title glitch-text" id="analysis-title">Секвенирование генома...</h2>
+                    <p class="analysis-subtitle" id="analysis-subtitle"></p>
+                </div>
+                <div class="analysis-steps" id="analysis-steps"></div>
+            </div>
+        </div>
 
-    function closeModal() { 
-        document.getElementById('gameModal').classList.remove('active');
-        document.body.style.overflow = "";
-    }
+        <!-- ЭКРАН 4: РЕЗУЛЬТАТ -->
+        <div id="screen-result" class="screen">
+            <div class="result-header">
+                <h2 class="result-label">Геном расшифрован</h2>
+                <h1 class="result-archetype" id="result-archetype"></h1>
+            </div>
+            
+            <div class="result-main-card">
+                <div class="dna-badge" id="dna-badge">
+                    <canvas id="badge-canvas" width="120" height="120"></canvas>
+                </div>
+                <div class="result-info">
+                    <div class="archetype-description" id="archetype-description"></div>
+                    <div class="traits-container" id="traits-container"></div>
+                </div>
+            </div>
 
-    function escapeHtml(str) { 
-        if (!str) return ''; 
-        return str.replace(/[&<>]/g, function(m){
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+            <div class="diagnosis-block">
+                <div class="diagnosis-icon">🧬</div>
+                <p class="diagnosis-text" id="diagnosis-text"></p>
+            </div>
 
-    function scrollToTop() { 
-        window.scrollTo({top:0, behavior:'smooth'});
-        document.getElementById('navHome').classList.add('active');
-        document.getElementById('navCatalog').classList.remove('active');
-    }
+            <div class="games-section">
+                <h3 class="games-title">Идеальные игры для твоего генома</h3>
+                <div class="games-grid" id="games-grid"></div>
+            </div>
 
-    function scrollToCatalog() { 
-        window.scrollTo({top:0, behavior:'smooth'});
-        document.getElementById('navHome').classList.remove('active');
-        document.getElementById('navCatalog').classList.add('active');
-    }
+            <div class="share-section">
+                <button class="secondary-btn" onclick="restartTest()">ПРОЙТИ ЗАНОВО</button>
+                <button class="secondary-btn" onclick="shareResult()">ПОДЕЛИТЬСЯ</button>
+            </div>
+        </div>
+    </div>
 
-    // Инициализация
-    updateStats();
-    setupFiltersAndSearch();
-    renderGamesUI("", "all");
-
-    document.getElementById('gameModal').addEventListener('click', (e) => {
-        if (e.target === document.getElementById('gameModal')) closeModal();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    setTimeout(() => {
-        document.getElementById("loader").classList.add("hidden");
-    }, 800);
-
-    window.closeModal = closeModal;
-    window.scrollToTop = scrollToTop;
-    window.scrollToCatalog = scrollToCatalog;
-    window.openModal = openModal;
-    window.redirectToTelegram = redirectToTelegram;
-</script>
+    <script src="questions.js"></script>
+    <script src="particles.js"></script>
+    <script src="dna-animation.js"></script>
+    <script src="audio.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
-```
