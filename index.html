@@ -1,1624 +1,354 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StintikVPN — Свобода в сети</title>
-<meta name="description" content="Коллекция лучших подписок, инструментов и гайдов для обхода блокировок Telegram, Discord, YouTube.">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlN0aW50aWtWUE4iLAogICJzaG9ydF9uYW1lIjogIlN0aW50aWtWUE4iLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwYSIsCiAgInRoZW1lX2NvbG9yIjogIiNmZjZiMWEiLAogICJpY29ucyI6IFtdCn0=">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StintikVPN — Свободный интернет в один клик</title>
+    <meta name="description" content="Бесплатные, быстрые и надёжные VPN-подписки. Скопируйте ссылку, вставьте в приложение и пользуйтесь. Без регистрации и сложных настроек.">
+    
+    <!-- Шрифты: Plus Jakarta Sans для премиального, современного вида -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Иконки Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP для премиальных анимаций при скролле -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  :root {
-    --bg: #0a0a0a;
-    --bg-elev: #111111;
-    --bg-elev-2: #161616;
-    --line: rgba(255, 255, 255, 0.08);
-    --line-strong: rgba(255, 255, 255, 0.14);
-    --text: #ededed;
-    --text-dim: #888888;
-    --text-faint: #555555;
-    --accent: #ff6b1a;
-    --accent-soft: rgba(255, 107, 26, 0.15);
-    --accent-glow: rgba(255, 107, 26, 0.4);
-    --success: #3ddc84;
-    --radius: 14px;
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            950: '#09090b', // Глубокий, богатый чёрный (не #000)
+                            900: '#18181b',
+                            800: '#27272a',
+                            400: '#a1a1aa',
+                            200: '#e4e4e7',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
-  [data-theme="light"] {
-    --bg: #fafafa;
-    --bg-elev: #ffffff;
-    --bg-elev-2: #f5f5f5;
-    --line: rgba(0, 0, 0, 0.08);
-    --line-strong: rgba(0, 0, 0, 0.14);
-    --text: #1a1a1a;
-    --text-dim: #666666;
-    --text-faint: #999999;
-    --accent: #e85d00;
-    --accent-soft: rgba(232, 93, 0, 0.1);
-    --accent-glow: rgba(232, 93, 0, 0.3);
-  }
+    <style>
+        body {
+            background-color: #09090b;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        /* Живой, дышащий фон */
+        .living-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+            animation: breathe 12s ease-in-out infinite alternate;
+        }
+        
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
 
-  html { scroll-behavior: smooth; }
+        /* Эффект шума для текстуры премиум-класса */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
 
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    font-feature-settings: 'cv11', 'ss01', 'ss03';
-    letter-spacing: -0.01em;
-    transition: background 0.3s var(--ease), color 0.3s var(--ease);
-  }
+        /* Стеклянные карточки */
+        .glass-card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover {
+            background: rgba(39, 39, 42, 0.8);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
 
-  .bg-grid {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 80px 80px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
-  }
-  .bg-noise {
-    position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.04;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .bg-glow {
-    position: fixed; top: -20%; left: 50%; transform: translateX(-50%);
-    width: 1200px; height: 800px;
-    background: radial-gradient(ellipse at center, var(--accent-soft) 0%, transparent 60%);
-    z-index: 0; pointer-events: none; filter: blur(60px); opacity: 0.6;
-    transition: transform 0.3s ease-out;
-  }
+        /* Кнопка копирования с анимацией */
+        .copy-btn {
+            transition: all 0.3s ease;
+        }
+        .copy-btn.copied {
+            background-color: #22c55e !important;
+            border-color: #22c55e !important;
+            color: white !important;
+        }
 
-  .wrap { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
-
-  /* === NAV === */
-  nav {
-    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-    z-index: 100;
-    background: rgba(10, 10, 10, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--line);
-    border-radius: 100px;
-    padding: 8px 8px 8px 20px;
-    display: flex; align-items: center; gap: 24px;
-    transition: all 0.4s var(--ease);
-  }
-  [data-theme="light"] nav { background: rgba(255, 255, 255, 0.8); }
-  .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.95rem; letter-spacing: -0.02em; }
-  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); animation: pulse-dot 2s ease-in-out infinite; }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(0.85); }
-  }
-  .nav-links { display: flex; gap: 4px; list-style: none; }
-  .nav-links a {
-    color: var(--text-dim); text-decoration: none; font-size: 0.88rem; font-weight: 500;
-    padding: 8px 14px; border-radius: 100px; transition: all 0.25s var(--ease);
-  }
-  .nav-links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
-  [data-theme="light"] .nav-links a:hover { background: rgba(0, 0, 0, 0.05); }
-  .nav-controls { display: flex; gap: 8px; align-items: center; }
-  .nav-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: transparent; border: 1px solid var(--line);
-    color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.25s var(--ease); font-size: 0.9rem;
-  }
-  .nav-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .nav-cta {
-    background: var(--text); color: var(--bg); padding: 8px 18px; border-radius: 100px;
-    font-size: 0.88rem; font-weight: 600; text-decoration: none;
-    transition: all 0.25s var(--ease); display: flex; align-items: center; gap: 6px;
-  }
-  .nav-cta:hover { background: var(--accent); color: var(--text); transform: translateY(-1px); }
-  @media (max-width: 900px) {
-    .nav-links { display: none; }
-    nav { padding: 6px 6px 6px 16px; gap: 12px; }
-  }
-
-  /* === HERO === */
-  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 0 80px; position: relative; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 6px 14px 6px 8px;
-    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
-    border-radius: 100px; font-size: 0.82rem; color: var(--text-dim);
-    margin-bottom: 32px; width: fit-content; font-family: 'JetBrains Mono', monospace;
-  }
-  [data-theme="light"] .hero-badge { background: rgba(0, 0, 0, 0.04); }
-  .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse-dot 2s ease-in-out infinite; }
-  .hero-badge strong { color: var(--text); font-weight: 500; }
-  .hero h1 {
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-    font-size: clamp(3rem, 9vw, 7.5rem); font-weight: 700;
-    line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 32px; max-width: 1100px;
-  }
-  .hero h1 .accent {
-    background: linear-gradient(135deg, var(--accent) 0%, #ff9a4a 100%);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .hero h1 .outline { -webkit-text-stroke: 1.5px var(--text); -webkit-text-fill-color: transparent; }
-  .hero-sub { font-size: clamp(1.05rem, 1.5vw, 1.25rem); color: var(--text-dim); max-width: 560px; margin-bottom: 48px; line-height: 1.6; font-weight: 400; }
-  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 80px; }
-  .btn {
-    padding: 14px 28px; border-radius: 100px; font-size: 0.95rem; font-weight: 600;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-    cursor: pointer; border: none; transition: all 0.3s var(--ease); letter-spacing: -0.01em;
-  }
-  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 0 0 1px var(--accent), 0 8px 32px var(--accent-glow); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px var(--accent), 0 12px 40px var(--accent-glow); }
-  .btn-ghost { background: rgba(255, 255, 255, 0.04); color: var(--text); border: 1px solid var(--line); }
-  [data-theme="light"] .btn-ghost { background: rgba(0, 0, 0, 0.04); }
-  .btn-ghost:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--line-strong); }
-  [data-theme="light"] .btn-ghost:hover { background: rgba(0, 0, 0, 0.08); }
-  .btn .arrow { transition: transform 0.3s var(--ease); }
-  .btn:hover .arrow { transform: translateX(4px); }
-  .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); padding-top: 40px; }
-  .hero-stat { padding: 0 32px; border-right: 1px solid var(--line); }
-  .hero-stat:last-child { border-right: none; }
-  .hero-stat:first-child { padding-left: 0; }
-  .hero-stat-num { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
-  .hero-stat-label { font-size: 0.85rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; }
-  @media (max-width: 768px) {
-    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 32px 0; }
-    .hero-stat { border-right: none; padding: 0 20px 0 0; }
-    .hero-stat:nth-child(odd) { border-right: 1px solid var(--line); padding-right: 20px; }
-    .hero-stat:nth-child(even) { padding-left: 20px; padding-right: 0; }
-    .hero-stat:nth-child(1), .hero-stat:nth-child(2) { padding-bottom: 32px; border-bottom: 1px solid var(--line); }
-    .hero-stat:nth-child(3) { padding-left: 0; }
-  }
-
-  /* === MARQUEE === */
-  .marquee {
-    padding: 40px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    overflow: hidden; position: relative;
-    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-  }
-  .marquee-track { display: flex; gap: 60px; animation: scroll 40s linear infinite; width: max-content; }
-  .marquee-item {
-    font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-weight: 500; color: var(--text-faint); white-space: nowrap;
-    display: flex; align-items: center; gap: 60px; letter-spacing: -0.02em;
-  }
-  .marquee-item::after { content: '✦'; color: var(--accent); font-size: 0.8em; }
-  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* === SECTION === */
-  section.block { padding: 140px 0; position: relative; }
-  .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 80px; gap: 40px; flex-wrap: wrap; }
-  .section-num {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent);
-    margin-bottom: 16px; letter-spacing: 0.05em; display: flex; align-items: center; gap: 10px;
-  }
-  .section-num::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
-  .section-title {
-    font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.2rem, 5vw, 4rem);
-    font-weight: 700; line-height: 1; letter-spacing: -0.03em; max-width: 700px;
-  }
-  .section-desc { color: var(--text-dim); max-width: 400px; font-size: 1.05rem; line-height: 1.6; }
-
-  /* === SUBSCRIPTIONS === */
-  .subs-tabs {
-    display: flex; gap: 6px; margin-bottom: 32px; flex-wrap: wrap;
-    padding: 6px; background: var(--bg-elev); border: 1px solid var(--line);
-    border-radius: 100px; width: fit-content; max-width: 100%;
-  }
-  .subs-tab {
-    padding: 10px 20px; border-radius: 100px;
-    background: transparent; border: none; color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;
-    cursor: pointer; transition: all 0.25s var(--ease);
-    letter-spacing: 0.02em; white-space: nowrap;
-  }
-  .subs-tab:hover { color: var(--text); }
-  .subs-tab.active { background: var(--accent); color: #fff; box-shadow: 0 4px 16px var(--accent-glow); }
-
-  .subs-list {
-    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-    background: var(--bg);
-  }
-  .sub-row {
-    display: grid; grid-template-columns: 60px 1fr auto; gap: 24px; align-items: center;
-    padding: 24px 32px; border-bottom: 1px solid var(--line);
-    transition: all 0.3s var(--ease);
-  }
-  .sub-row:last-child { border-bottom: none; }
-  .sub-row:hover { background: var(--bg-elev); padding-left: 40px; }
-  .sub-num {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
-    color: var(--text-faint);
-  }
-  .sub-info { min-width: 0; }
-  .sub-name {
-    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem;
-    margin-bottom: 4px; letter-spacing: -0.01em;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .sub-name .tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-    padding: 2px 8px; background: var(--accent-soft); color: var(--accent);
-    border-radius: 100px; font-weight: 500; letter-spacing: 0.02em;
-  }
-  .sub-url {
-    color: var(--text-dim); font-size: 0.85rem;
-    font-family: 'JetBrains Mono', monospace;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .sub-actions { display: flex; gap: 8px; }
-  .icon-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: transparent; border: 1px solid var(--line);
-    color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.25s var(--ease);
-  }
-  .icon-btn:hover {
-    background: var(--accent); border-color: var(--accent); color: #fff;
-    transform: translateY(-2px);
-  }
-  .icon-btn.copied { background: var(--success); border-color: var(--success); color: #fff; }
-
-  .subs-loading, .subs-empty, .subs-error {
-    padding: 80px 32px; text-align: center;
-    border: 1px solid var(--line); border-radius: var(--radius);
-    background: var(--bg);
-  }
-  .spinner {
-    width: 32px; height: 32px; margin: 0 auto 16px;
-    border: 2px solid var(--line); border-top-color: var(--accent);
-    border-radius: 50%; animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .subs-loading .label { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
-  .subs-empty { color: var(--text-dim); }
-  .subs-error { color: #ff6b6b; }
-  .subs-error a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
-
-  .subs-meta {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 20px; padding: 0 8px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-faint);
-  }
-  .subs-meta .refresh {
-    color: var(--text-dim); cursor: pointer; background: none; border: none;
-    font-family: inherit; font-size: inherit;
-    display: flex; align-items: center; gap: 6px;
-    transition: color 0.2s;
-  }
-  .subs-meta .refresh:hover { color: var(--accent); }
-
-  @media (max-width: 768px) {
-    .sub-row { grid-template-columns: 1fr auto; padding: 20px; gap: 12px; }
-    .sub-row:hover { padding-left: 20px; }
-    .sub-num { display: none; }
-    .subs-tabs { width: 100%; overflow-x: auto; flex-wrap: nowrap; }
-  }
-
-  /* === QR MODAL === */
-  .qr-modal {
-    display: none;
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .qr-modal.show { display: flex; }
-  .qr-content {
-    background: var(--bg-elev);
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    padding: 48px;
-    max-width: 400px;
-    text-align: center;
-    position: relative;
-  }
-  .qr-close {
-    position: absolute; top: 16px; right: 16px;
-    width: 32px; height: 32px; border-radius: 50%;
-    background: transparent; border: 1px solid var(--line);
-    color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .qr-close:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .qr-code {
-    width: 240px; height: 240px;
-    margin: 0 auto 24px;
-    background: #fff;
-    padding: 16px;
-    border-radius: 12px;
-  }
-  .qr-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.3rem; font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .qr-desc {
-    color: var(--text-dim); font-size: 0.9rem;
-    margin-bottom: 24px;
-  }
-
-  /* === TG SUBSCRIBE MODAL === */
-  .tg-modal {
-    display: none;
-    position: fixed; inset: 0; z-index: 1001;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .tg-modal.show { display: flex; }
-  .tg-content {
-    background: var(--bg-elev);
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    padding: 48px;
-    max-width: 500px;
-    text-align: center;
-    position: relative;
-  }
-  .tg-close {
-    position: absolute; top: 16px; right: 16px;
-    width: 32px; height: 32px; border-radius: 50%;
-    background: transparent; border: 1px solid var(--line);
-    color: var(--text-dim); cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .tg-close:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .tg-icon {
-    width: 80px; height: 80px;
-    margin: 0 auto 24px;
-    background: linear-gradient(135deg, #0088cc, #00aaff);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem;
-  }
-  .tg-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.8rem; font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .tg-desc {
-    color: var(--text-dim); font-size: 1rem;
-    margin-bottom: 32px; line-height: 1.6;
-  }
-  .tg-actions {
-    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  }
-
-  /* === TG PROXY === */
-  .tg-proxy-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1px; background: var(--line);
-    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-  }
-  .tg-proxy-card {
-    background: var(--bg); padding: 32px;
-    transition: all 0.3s var(--ease);
-  }
-  .tg-proxy-card:hover { background: var(--bg-elev); }
-  .tg-proxy-name {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.2rem; font-weight: 600;
-    margin-bottom: 8px;
-  }
-  .tg-proxy-desc {
-    color: var(--text-dim); font-size: 0.9rem;
-    margin-bottom: 16px; line-height: 1.6;
-  }
-  .tg-proxy-link {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem; color: var(--accent);
-    word-break: break-all;
-    margin-bottom: 16px;
-  }
-  .tg-proxy-actions {
-    display: flex; gap: 8px;
-  }
-
-  /* === CLIENTS === */
-  .clients-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px; background: var(--line);
-    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-  }
-  .client-card {
-    background: var(--bg); padding: 36px;
-    display: flex; flex-direction: column; gap: 16px;
-    transition: all 0.3s var(--ease); position: relative;
-  }
-  .client-card:hover { background: var(--bg-elev); }
-  .client-card.recommended {
-    background: linear-gradient(135deg, rgba(255, 107, 26, 0.06), transparent);
-  }
-  .client-card.recommended::before {
-    content: '★ ДЛЯ ТЕБЯ';
-    position: absolute; top: 16px; right: 16px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
-    padding: 4px 10px; background: var(--accent); color: #fff;
-    border-radius: 100px; font-weight: 500; letter-spacing: 0.05em;
-  }
-  .client-head { display: flex; align-items: center; gap: 16px; }
-  .client-icon {
-    width: 56px; height: 56px; border-radius: 14px;
-    background: var(--bg-elev-2); border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-  }
-  .client-card.recommended .client-icon {
-    background: var(--accent-soft); border-color: rgba(255, 107, 26, 0.3);
-  }
-  .client-name {
-    font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem;
-    font-weight: 600; letter-spacing: -0.02em;
-  }
-  .client-desc { color: var(--text-dim); font-size: 0.92rem; line-height: 1.6; flex: 1; }
-  .client-platforms { display: flex; gap: 6px; flex-wrap: wrap; }
-  .platform-badge {
-    padding: 4px 10px; background: var(--bg-elev-2);
-    border: 1px solid var(--line); border-radius: 100px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-    color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em;
-  }
-  .platform-badge.current { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .client-download {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 12px; border-radius: 100px;
-    background: var(--bg-elev-2); border: 1px solid var(--line);
-    color: var(--text); text-decoration: none;
-    font-size: 0.88rem; font-weight: 600;
-    transition: all 0.25s var(--ease);
-  }
-  .client-download:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .client-card.recommended .client-download { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .client-card.recommended .client-download:hover { background: #ff8533; }
-
-  /* === FEATURES === */
-  .features {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px;
-    background: var(--line); border: 1px solid var(--line);
-    border-radius: var(--radius); overflow: hidden;
-  }
-  .feature {
-    background: var(--bg); padding: 48px 36px;
-    transition: background 0.4s var(--ease); position: relative; overflow: hidden;
-    min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .feature:hover { background: var(--bg-elev); }
-  .feature.span-2 { grid-column: span 3; }
-  .feature.span-3 { grid-column: span 3; }
-  .feature-icon {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: var(--accent-soft); border: 1px solid rgba(255, 107, 26, 0.2);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--accent); margin-bottom: 32px; font-size: 1.2rem;
-  }
-  .feature h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.02em; }
-  .feature p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
-  .feature-tag {
-    display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-    color: var(--accent); padding: 4px 10px; background: var(--accent-soft);
-    border-radius: 100px; margin-top: 20px; width: fit-content; letter-spacing: 0.02em;
-  }
-  @media (max-width: 900px) {
-    .features { grid-template-columns: 1fr; }
-    .feature.span-2, .feature.span-3 { grid-column: span 1; }
-  }
-
-  /* === STATUS === */
-  .status-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
-    background: var(--line); border: 1px solid var(--line);
-    border-radius: var(--radius); overflow: hidden;
-  }
-  .status-item { background: var(--bg); padding: 36px; display: flex; flex-direction: column; gap: 20px; transition: background 0.3s var(--ease); }
-  .status-item:hover { background: var(--bg-elev); }
-  .status-top { display: flex; justify-content: space-between; align-items: center; }
-  .status-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
-  .status-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-    padding: 4px 10px; border-radius: 100px;
-    background: rgba(61, 220, 132, 0.1); color: var(--success);
-    border: 1px solid rgba(61, 220, 132, 0.2);
-  }
-  .status-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse-dot 2s ease-in-out infinite; }
-  .status-meta {
-    display: flex; justify-content: space-between;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-dim);
-    padding-top: 16px; border-top: 1px solid var(--line);
-  }
-  .status-meta strong { color: var(--text); font-weight: 500; }
-  @media (max-width: 768px) { .status-grid { grid-template-columns: 1fr; } }
-
-  /* === GUIDES === */
-  .guides { border-top: 1px solid var(--line); }
-  .guide { border-bottom: 1px solid var(--line); transition: background 0.3s var(--ease); }
-  .guide-head {
-    padding: 32px 0; display: grid;
-    grid-template-columns: 60px 1fr auto 40px; gap: 24px; align-items: center;
-    cursor: pointer; transition: padding 0.3s var(--ease);
-  }
-  .guide:hover .guide-head { padding-left: 12px; }
-  .guide-num { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-faint); }
-  .guide-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.3rem, 2.5vw, 1.8rem); font-weight: 600; letter-spacing: -0.02em; }
-  .guide-tag {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-dim);
-    padding: 4px 10px; border: 1px solid var(--line); border-radius: 100px;
-  }
-  .guide-toggle {
-    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s var(--ease); color: var(--text-dim); font-size: 1.2rem;
-  }
-  .guide.open .guide-toggle { background: var(--accent); border-color: var(--accent); color: #fff; transform: rotate(45deg); }
-  .guide-body { max-height: 0; overflow: hidden; transition: max-height 0.5s var(--ease); }
-  .guide.open .guide-body { max-height: 2000px; }
-  .guide-content { padding: 0 0 48px 84px; max-width: 800px; color: var(--text-dim); line-height: 1.7; }
-  .guide-content h4 { color: var(--text); font-size: 1rem; margin: 24px 0 12px; font-weight: 600; }
-  .guide-content h4:first-child { margin-top: 0; }
-  .guide-content p { margin-bottom: 12px; }
-  .guide-content code {
-    font-family: 'JetBrains Mono', monospace; background: var(--bg-elev);
-    padding: 2px 8px; border-radius: 4px; font-size: 0.88em;
-    color: var(--accent); border: 1px solid var(--line);
-  }
-  .guide-content pre {
-    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 8px;
-    padding: 16px 20px; overflow-x: auto; margin: 12px 0;
-    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text); line-height: 1.6;
-  }
-  .guide-content ul, .guide-content ol { padding-left: 20px; margin: 12px 0; }
-  .guide-content li { margin-bottom: 6px; }
-  .guide-content a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
-  @media (max-width: 768px) {
-    .guide-head { grid-template-columns: 1fr auto; gap: 16px; }
-    .guide-num, .guide-tag { display: none; }
-    .guide-content { padding: 0 0 32px 0; }
-  }
-
-  /* === SNI/CIDR === */
-  .sni-list {
-    border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
-    background: var(--bg);
-  }
-  .sni-row {
-    padding: 16px 24px; border-bottom: 1px solid var(--line);
-    font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;
-    color: var(--text-dim);
-    transition: all 0.2s;
-  }
-  .sni-row:last-child { border-bottom: none; }
-  .sni-row:hover { background: var(--bg-elev); color: var(--text); }
-
-  /* === TEAM === */
-  .team {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-    background: var(--line); border: 1px solid var(--line);
-    border-radius: var(--radius); overflow: hidden;
-  }
-  .team-card {
-    background: var(--bg); padding: 48px;
-    display: flex; gap: 28px; align-items: center;
-    transition: background 0.3s var(--ease);
-  }
-  .team-card:hover { background: var(--bg-elev); }
-  .team-avatar {
-    width: 80px; height: 80px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), #ff9a4a);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700;
-    color: #fff; flex-shrink: 0; position: relative;
-  }
-  .team-avatar::after {
-    content: ''; position: absolute; inset: -4px; border-radius: 50%;
-    border: 1px solid var(--accent); opacity: 0.3;
-  }
-  .team-info { flex: 1; }
-  .team-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.02em; }
-  .team-role { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px; }
-  .team-links { display: flex; gap: 8px; }
-  .team-link {
-    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: center; color: var(--text-dim);
-    text-decoration: none; transition: all 0.25s var(--ease);
-  }
-  .team-link:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px); }
-  @media (max-width: 768px) {
-    .team { grid-template-columns: 1fr; }
-    .team-card { padding: 32px; }
-  }
-
-  /* === CONTRIBUTING === */
-  .contributing-card {
-    border: 1px solid var(--line); border-radius: 24px;
-    padding: 60px 48px; position: relative; overflow: hidden;
-    background: var(--bg);
-  }
-  .contributing-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .contributing-card h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2rem; font-weight: 700;
-    margin-bottom: 16px;
-  }
-  .contributing-card p {
-    color: var(--text-dim); font-size: 1.05rem;
-    line-height: 1.7; margin-bottom: 24px;
-  }
-  .contributing-card ol {
-    padding-left: 24px; margin-bottom: 32px;
-    color: var(--text-dim); line-height: 1.8;
-  }
-  .contributing-card ol li { margin-bottom: 8px; }
-  .contributing-card code {
-    font-family: 'JetBrains Mono', monospace;
-    background: var(--bg-elev); padding: 2px 8px;
-    border-radius: 4px; font-size: 0.88em;
-    color: var(--accent); border: 1px solid var(--line);
-  }
-
-  /* === CTA === */
-  .cta { padding: 120px 0; text-align: center; position: relative; }
-  .cta-card {
-    border: 1px solid var(--line); border-radius: 24px;
-    padding: 80px 40px; position: relative; overflow: hidden;
-    background: radial-gradient(ellipse at top, var(--accent-soft), transparent 70%);
-  }
-  .cta-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .cta h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700;
-    letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 20px;
-    max-width: 700px; margin-left: auto; margin-right: auto;
-  }
-  .cta p { color: var(--text-dim); font-size: 1.1rem; max-width: 500px; margin: 0 auto 40px; line-height: 1.6; }
-  .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-  /* === FOOTER === */
-  footer { border-top: 1px solid var(--line); padding: 40px 0; }
-  .footer-inner {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 20px; flex-wrap: wrap; font-size: 0.88rem; color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .footer-inner a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
-  .footer-inner a:hover { color: var(--accent); }
-  .footer-links { display: flex; gap: 24px; }
-
-  /* === REVEAL === */
-  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  ::selection { background: var(--accent); color: #fff; }
-  ::-webkit-scrollbar { width: 10px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-</style>
+        /* Скроллбар */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    </style>
 </head>
-<body>
+<body class="antialiased selection:bg-white selection:text-zinc-950">
 
-<div class="bg-grid"></div>
-<div class="bg-noise"></div>
-<div class="bg-glow" id="bgGlow"></div>
+    <!-- Фоновые эффекты -->
+    <div class="living-bg"></div>
+    <div class="noise-overlay"></div>
 
-<nav>
-  <div class="nav-brand">
-    <span class="nav-dot"></span>
-    <span>StintikVPN</span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#subs" data-i18n="nav_subs">Подписки</a></li>
-    <li><a href="#tgproxy" data-i18n="nav_tgproxy">TG Прокси</a></li>
-    <li><a href="#clients" data-i18n="nav_clients">Клиенты</a></li>
-    <li><a href="#guides" data-i18n="nav_guides">Гайды</a></li>
-    <li><a href="#team" data-i18n="nav_team">Команда</a></li>
-  </ul>
-  <div class="nav-controls">
-    <button class="nav-btn" id="langToggle" title="RU/EN">RU</button>
-    <button class="nav-btn" id="themeToggle" title="Тема">🌙</button>
-    <a href="https://github.com/Stintik-123/StintikVPN" target="_blank" class="nav-cta">
-      GitHub <span class="arrow">→</span>
-    </a>
-  </div>
-</nav>
-
-<div class="wrap">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      <span data-i18n="hero_badge">Все сервисы <strong>работают</strong> · Июль 2026</span>
-    </div>
-
-    <h1>
-      <span data-i18n="hero_title_1">Свобода</span><br>
-      <span data-i18n="hero_title_2">в <span class="accent">сети</span> —</span><br>
-      <span data-i18n="hero_title_3"><span class="outline">без границ.</span></span>
-    </h1>
-
-    <p class="hero-sub" data-i18n="hero_sub">
-      Коллекция лучших подписок, инструментов и гайдов для обхода блокировок. Telegram, Discord, YouTube — проверено, работает, обновляется автоматически.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#subs" class="btn btn-primary">
-        <span data-i18n="hero_btn_1">Получить подписку</span> <span class="arrow">→</span>
-      </a>
-      <a href="#guides" class="btn btn-ghost" data-i18n="hero_btn_2">Читать гайды</a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">5+</div>
-        <div class="hero-stat-label" data-i18n="stat_protocols">Протоколов</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">24/7</div>
-        <div class="hero-stat-label" data-i18n="stat_monitoring">Мониторинг</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">100%</div>
-        <div class="hero-stat-label" data-i18n="stat_opensource">Open Source</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">0₽</div>
-        <div class="hero-stat-label" data-i18n="stat_forever">Навсегда</div>
-      </div>
-    </div>
-  </section>
-
-</div>
-
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <div class="marquee-item">VLESS</div>
-    <div class="marquee-item">TROJAN</div>
-    <div class="marquee-item">SHADOWSOCKS</div>
-    <div class="marquee-item">HYSTERIA2</div>
-    <div class="marquee-item">TGWSPROXY</div>
-    <div class="marquee-item">BYEBYEDPI</div>
-    <div class="marquee-item">ZAPRET</div>
-    <div class="marquee-item">VLESS</div>
-    <div class="marquee-item">TROJAN</div>
-    <div class="marquee-item">SHADOWSOCKS</div>
-    <div class="marquee-item">HYSTERIA2</div>
-    <div class="marquee-item">TGWSPROXY</div>
-    <div class="marquee-item">BYEBYEDPI</div>
-    <div class="marquee-item">ZAPRET</div>
-  </div>
-</div>
-
-<div class="wrap">
-
-  <!-- SUBSCRIPTIONS -->
-  <section class="block" id="subs">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">01 — <span data-i18n="subs_num">Подписки</span></div>
-        <h2 class="section-title" data-i18n="subs_title">Готовые конфиги. Один клик — и ты в сети.</h2>
-      </div>
-      <p class="section-desc" data-i18n="subs_desc">
-        Собираем лучшее со всего комьюнити. Белые и чёрные списки, VLESS, Trojan, Shadowsocks, Hysteria2 — всё в одном месте.
-      </p>
-    </div>
-
-    <div class="reveal">
-      <div class="subs-tabs" id="subsTabs">
-        <button class="subs-tab active" data-tab="vless">VLESS</button>
-        <button class="subs-tab" data-tab="trojan">TROJAN</button>
-        <button class="subs-tab" data-tab="ss">SHADOWSOCKS</button>
-        <button class="subs-tab" data-tab="hysteria2">HYSTERIA2</button>
-        <button class="subs-tab" data-tab="white">WHITE LIST</button>
-        <button class="subs-tab" data-tab="black">BLACK LIST</button>
-      </div>
-
-      <div id="subsContainer">
-        <div class="subs-loading">
-          <div class="spinner"></div>
-          <div class="label" data-i18n="subs_loading">Загрузка подписок...</div>
-        </div>
-      </div>
-
-      <div class="subs-meta">
-        <span id="subsInfo">—</span>
-        <button class="refresh" id="subsRefresh">
-          <span>↻</span> <span data-i18n="subs_refresh">Обновить</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- TG PROXY -->
-  <section class="block" id="tgproxy">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">02 — <span data-i18n="tgproxy_num">TG Прокси</span></div>
-        <h2 class="section-title" data-i18n="tgproxy_title">Готовые MTProxy ссылки.</h2>
-      </div>
-      <p class="section-desc" data-i18n="tgproxy_desc">
-        Просто нажми на ссылку — Telegram откроется с уже настроенным прокси. Работает на всех устройствах.
-      </p>
-    </div>
-
-    <div class="tg-proxy-grid reveal" id="tgProxyGrid"></div>
-  </section>
-
-  <!-- CLIENTS -->
-  <section class="block" id="clients">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">03 — <span data-i18n="clients_num">Клиенты</span></div>
-        <h2 class="section-title" data-i18n="clients_title">Под твоё устройство.</h2>
-      </div>
-      <p class="section-desc" data-i18n="clients_desc">
-        Сайт определил платформу автоматически. Отмеченный клиент — лучший выбор для тебя.
-      </p>
-    </div>
-
-    <div class="clients-grid reveal" id="clientsGrid"></div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="block" id="features">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">04 — <span data-i18n="features_num">Возможности</span></div>
-        <h2 class="section-title" data-i18n="features_title">Всё, что нужно для свободного интернета.</h2>
-      </div>
-      <p class="section-desc" data-i18n="features_desc">
-        От готовых подписок до тонкой настройки DPI-обхода. Один источник — ноль лишнего.
-      </p>
-    </div>
-
-    <div class="features reveal">
-      <div class="feature span-3">
-        <div>
-          <div class="feature-icon">⚡</div>
-          <h3 data-i18n="feature_1_title">Готовые подписки</h3>
-          <p data-i18n="feature_1_desc">VLESS, Trojan, Shadowsocks, Hysteria2 — белые и чёрные списки. Обновляются автоматически из репозитория.</p>
-        </div>
-        <span class="feature-tag">AUTO-UPDATE</span>
-      </div>
-
-      <div class="feature span-3">
-        <div>
-          <div class="feature-icon">📱</div>
-          <h3 data-i18n="feature_2_title">Любое устройство</h3>
-          <p data-i18n="feature_2_desc">Клиенты под Windows, macOS, Linux, Android и iOS. Сайт сам определит платформу и подскажет лучшее.</p>
-        </div>
-        <span class="feature-tag">ALL PLATFORMS</span>
-      </div>
-
-      <div class="feature span-2">
-        <div>
-          <div class="feature-icon">🛡️</div>
-          <h3 data-i18n="feature_3_title">Обход DPI</h3>
-          <p data-i18n="feature_3_desc">ByeByeDPI, zapret, tgwsproxy — проверенные решения.</p>
-        </div>
-      </div>
-
-      <div class="feature span-2">
-        <div>
-          <div class="feature-icon">📖</div>
-          <h3 data-i18n="feature_4_title">Пошаговые гайды</h3>
-          <p data-i18n="feature_4_desc">От установки до тонкой настройки под провайдера.</p>
-        </div>
-      </div>
-
-      <div class="feature span-2">
-        <div>
-          <div class="feature-icon">🔓</div>
-          <h3 data-i18n="feature_5_title">Open Source</h3>
-          <p data-i18n="feature_5_desc">Весь код открыт. Форкай, улучшай, предлагай.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATUS -->
-  <section class="block" id="status">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">05 — <span data-i18n="status_num">Статус</span></div>
-        <h2 class="section-title" data-i18n="status_title">Работает прямо сейчас.</h2>
-      </div>
-      <p class="section-desc" data-i18n="status_desc">
-        Мониторинг доступности сервисов. Без пинга, без магии — только факты.
-      </p>
-    </div>
-
-    <div class="status-grid reveal">
-      <div class="status-item">
-        <div class="status-top">
-          <div class="status-name">Telegram</div>
-          <div class="status-badge"><span class="status-badge-dot"></span> ONLINE</div>
-        </div>
-        <p style="color: var(--text-dim); font-size: 0.92rem;" data-i18n="status_tg_desc">
-          Работает через tgwsproxy и ByeByeDPI. Стабильно у большинства провайдеров.
-        </p>
-        <div class="status-meta">
-          <span data-i18n="status_method">Метод: <strong>WS-Proxy</strong></span>
-          <span data-i18n="status_ping">Пинг: <strong>~40ms</strong></span>
-        </div>
-      </div>
-
-      <div class="status-item">
-        <div class="status-top">
-          <div class="status-name">Discord</div>
-          <div class="status-badge"><span class="status-badge-dot"></span> ONLINE</div>
-        </div>
-        <p style="color: var(--text-dim); font-size: 0.92rem;" data-i18n="status_discord_desc">
-          Голосовые и текстовые каналы работают через zapret. Стриминг — без обрывов.
-        </p>
-        <div class="status-meta">
-          <span data-i18n="status_method">Метод: <strong>ZAPRET</strong></span>
-          <span data-i18n="status_ping">Пинг: <strong>~60ms</strong></span>
-        </div>
-      </div>
-
-      <div class="status-item">
-        <div class="status-top">
-          <div class="status-name">YouTube</div>
-          <div class="status-badge"><span class="status-badge-dot"></span> ONLINE</div>
-        </div>
-        <p style="color: var(--text-dim); font-size: 0.92rem;" data-i18n="status_yt_desc">
-          Превентивные меры настроены. Подписки и зеркала готовы к любой блокировке.
-        </p>
-        <div class="status-meta">
-          <span data-i18n="status_method">Метод: <strong>VLESS / SS</strong></span>
-          <span data-i18n="status_speed">Скорость: <strong>100Mbps+</strong></span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GUIDES -->
-  <section class="block" id="guides">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">06 — <span data-i18n="guides_num">Гайды</span></div>
-        <h2 class="section-title" data-i18n="guides_title">Настройка за 10 минут.</h2>
-      </div>
-      <p class="section-desc" data-i18n="guides_desc">
-        Проверенные инструкции. Копируй команды, следуй шагам — всё будет работать.
-      </p>
-    </div>
-
-    <div class="guides reveal">
-      <div class="guide">
-        <div class="guide-head">
-          <div class="guide-num">01</div>
-          <div class="guide-title" data-i18n="guide_1_title">Telegram через tgwsproxy</div>
-          <div class="guide-tag">VPS · 5 минут</div>
-          <div class="guide-toggle">+</div>
-        </div>
-        <div class="guide-body">
-          <div class="guide-content">
-            <p data-i18n="guide_1_desc"><strong>tgwsproxy</strong> — легковесный WebSocket-прокси для Telegram. Поднимается на любом VPS, обходит DPI через маскировку под обычный HTTPS.</p>
-            <h4 data-i18n="guide_requirements">Что понадобится</h4>
-            <ul>
-              <li data-i18n="guide_1_req_1">VPS с белым IP (от 100₽/мес)</li>
-              <li data-i18n="guide_1_req_2">Домен (или работа через IP)</li>
-              <li data-i18n="guide_1_req_3">SSH-клиент</li>
-            </ul>
-            <h4 data-i18n="guide_step_1">Шаг 1. Подключение к серверу</h4>
-            <pre>ssh root@YOUR_SERVER_IP</pre>
-            <h4 data-i18n="guide_step_2">Шаг 2. Установка зависимостей</h4>
-            <pre>apt update && apt install -y git golang-go</pre>
-            <h4 data-i18n="guide_step_3">Шаг 3. Сборка</h4>
-            <pre>git clone https://github.com/username/tgwsproxy
-cd tgwsproxy
-go build -o tgwsproxy</pre>
-            <h4 data-i18n="guide_step_4">Шаг 4. Запуск</h4>
-            <pre>./tgwsproxy -listen :8443 -secret YOUR_SECRET</pre>
-            <h4 data-i18n="guide_step_5">Шаг 5. Настройка клиента</h4>
-            <p data-i18n="guide_1_step_5_desc">В Telegram-клиенте укажи: Server — IP или домен VPS, Port — 8443, Secret — YOUR_SECRET.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="guide">
-        <div class="guide-head">
-          <div class="guide-num">02</div>
-          <div class="guide-title" data-i18n="guide_2_title">Telegram через ByeByeDPI</div>
-          <div class="guide-tag" data-i18n="guide_2_tag">Локально · 3 минуты</div>
-          <div class="guide-toggle">+</div>
-        </div>
-        <div class="guide-body">
-          <div class="guide-content">
-            <p data-i18n="guide_2_desc"><strong>ByeByeDPI</strong> — форк zapret под Telegram. Работает без VPS, прямо на твоём компьютере или роутере.</p>
-            <h4 data-i18n="guide_step_1">Шаг 1. Скачивание</h4>
-            <p data-i18n="guide_2_step_1_desc">Релиз — с официального репозитория ByeByeDPI. Для Windows — <code>byebyedpi-win.zip</code>, для Linux — <code>byebyedpi-linux</code>.</p>
-            <h4 data-i18n="guide_step_2">Шаг 2. Запуск на Windows</h4>
-            <p data-i18n="guide_2_step_2_desc">От имени администратора:</p>
-            <pre>byebyedpi.exe --demode --auto</pre>
-            <p data-i18n="guide_2_step_2_note">Флаг <code>--auto</code> подбирает параметры под твой провайдер.</p>
-            <h4 data-i18n="guide_step_3">Шаг 3. Запуск на Linux</h4>
-            <pre>sudo ./byebyedpi --demode --auto</pre>
-            <h4 data-i18n="guide_step_4">Шаг 4. Прокси в Telegram</h4>
-            <p data-i18n="guide_2_step_4_desc">ByeByeDPI поднимает SOCKS5 на <code>127.0.0.1:1080</code>. В Telegram: SOCKS5, 127.0.0.1, 1080.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="guide">
-        <div class="guide-head">
-          <div class="guide-num">03</div>
-          <div class="guide-title" data-i18n="guide_3_title">Discord и YouTube через zapret</div>
-          <div class="guide-tag" data-i18n="guide_3_tag">Роутер / VPS · 10 минут</div>
-          <div class="guide-toggle">+</div>
-        </div>
-        <div class="guide-body">
-          <div class="guide-content">
-            <p data-i18n="guide_3_desc"><strong>zapret</strong> (от bolvan) — универсальный обход DPI. Работает на уровне ядра, модифицирует пакеты на лету.</p>
-            <h4 data-i18n="guide_step_1">Шаг 1. Установка на OpenWRT/Keenetic</h4>
-            <pre>opkg update
-opkg install git
-git clone https://github.com/bolvan/zapret
-cd zapret
-./install_bin.sh</pre>
-            <h4 data-i18n="guide_step_2">Шаг 2. Установка на Linux</h4>
-            <pre>git clone https://github.com/bolvan/zapret
-cd zapret
-./install_easy.sh</pre>
-            <h4 data-i18n="guide_step_3">Шаг 3. Выбор стратегии</h4>
-            <ul>
-              <li data-i18n="guide_3_strat_1"><strong>TPWS</strong> — легковесная, без root на клиенте</li>
-              <li data-i18n="guide_3_strat_2"><strong>NFQWS</strong> — мощная, работает с QUIC и TLS</li>
-              <li data-i18n="guide_3_strat_3"><strong>MDIG</strong> — обход блокировки по IP</li>
-            </ul>
-            <h4 data-i18n="guide_step_4">Шаг 4. Списки</h4>
-            <p data-i18n="guide_3_step_4_desc">Отредактируй <code>/opt/zapret/ipset/zapret-hosts-user.txt</code>:</p>
-            <pre>discord.com
-discordapp.com
-youtube.com
-googlevideo.com
-ytimg.com</pre>
-            <h4 data-i18n="guide_step_5">Шаг 5. Применение</h4>
-            <pre>/opt/zapret/start.sh
-systemctl enable zapret</pre>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SNI/CIDR -->
-  <section class="block" id="sni">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">07 — <span data-i18n="sni_num">SNI / CIDR</span></div>
-        <h2 class="section-title" data-i18n="sni_title">Списки для zapret.</h2>
-      </div>
-      <p class="section-desc" data-i18n="sni_desc">
-        Готовые SNI и CIDR маски для настройки zapret. Копируй и вставляй в конфигурацию.
-      </p>
-    </div>
-
-    <div class="reveal">
-      <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin-bottom: 16px;" data-i18n="sni_list_title">SNI списки</h3>
-      <div class="sni-list" style="margin-bottom: 32px;">
-        <div class="sni-row">discord.com</div>
-        <div class="sni-row">discordapp.com</div>
-        <div class="sni-row">gateway.discord.gg</div>
-        <div class="sni-row">youtube.com</div>
-        <div class="sni-row">googlevideo.com</div>
-        <div class="sni-row">ytimg.com</div>
-        <div class="sni-row">telegram.org</div>
-        <div class="sni-row">web.telegram.org</div>
-      </div>
-
-      <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; margin-bottom: 16px;" data-i18n="cidr_list_title">CIDR маски</h3>
-      <div class="sni-list">
-        <div class="sni-row">149.154.160.0/20</div>
-        <div class="sni-row">91.108.4.0/22</div>
-        <div class="sni-row">91.108.56.0/22</div>
-        <div class="sni-row">185.76.151.0/24</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM -->
-  <section class="block" id="team">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">08 — <span data-i18n="team_num">Команда</span></div>
-        <h2 class="section-title" data-i18n="team_title">Спасибо тем, кто делает проект.</h2>
-      </div>
-      <p class="section-desc" data-i18n="team_desc">
-        Некоммерческая инициатива. Без инвесторов, без рекламы — только энтузиазм.
-      </p>
-    </div>
-
-    <div class="team reveal">
-      <div class="team-card">
-        <div class="team-avatar">S</div>
-        <div class="team-info">
-          <div class="team-name">Stintik</div>
-          <div class="team-role" data-i18n="team_stintik_role">Основатель · Куратор подписок</div>
-          <div class="team-links">
-            <a href="https://github.com/Stintik-123" target="_blank" class="team-link" title="GitHub">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    <!-- Навигация -->
+    <nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl">
+        <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+            <a href="#" class="flex items-center space-x-3 group">
+                <!-- Место для вашего логотипа. Пока используем стильную заглушку -->
+                <div class="w-9 h-9 rounded-lg bg-white text-zinc-950 flex items-center justify-center shadow-lg shadow-white/10 group-hover:shadow-white/20 transition-all">
+                    <i data-lucide="shield" class="w-5 h-5 fill-current"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Stintik<span class="text-zinc-400">VPN</span></span>
             </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="team-card">
-        <div class="team-avatar">S</div>
-        <div class="team-info">
-          <div class="team-name">SapBotGit</div>
-          <div class="team-role" data-i18n="team_sapbot_role">Разработка · Автоматизация</div>
-          <div class="team-links">
-            <a href="https://github.com/SapBotGit" target="_blank" class="team-link" title="GitHub">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            <a href="https://github.com/Stintik-123/StintikVPN" target="_blank" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg transition-all">
+                <i data-lucide="github" class="w-4 h-4"></i>
+                GitHub
             </a>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </nav>
 
-  <!-- CONTRIBUTING -->
-  <section class="block" id="contributing">
-    <div class="section-head reveal">
-      <div>
-        <div class="section-num">09 — <span data-i18n="contrib_num">Contributing</span></div>
-        <h2 class="section-title" data-i18n="contrib_title">Хочешь помочь?</h2>
-      </div>
-      <p class="section-desc" data-i18n="contrib_desc">
-        Проект открыт для всех. Добавляй подписки, гайды, исправляй ошибки.
-      </p>
-    </div>
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-xs font-semibold mb-8 animate-float">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Работает стабильно • Обновлено сегодня
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-8 text-white gs-reveal">
+                Интернет без границ.<br>
+                <span class="text-zinc-500">Просто и безопасно.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed gs-reveal">
+                Никаких сложных настроек, регистраций или платежей. 
+                Просто скопируйте одну ссылку, вставьте в приложение — и всё работает. 
+                Понятно для любого возраста и любого устройства.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 gs-reveal">
+                <a href="#get-started" class="w-full sm:w-auto px-8 py-4 bg-white text-zinc-950 font-bold rounded-xl hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-xl shadow-white/5">
+                    Получить ссылку
+                    <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                </a>
+                <a href="#how-it-works" class="w-full sm:w-auto px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                    Как это работает?
+                </a>
+            </div>
+        </div>
+    </section>
 
-    <div class="contributing-card reveal">
-      <h3 data-i18n="contrib_how">Как внести вклад</h3>
-      <p data-i18n="contrib_desc_2">Мы принимаем pull requests с новыми подписками, гайдами и улучшениями. Вот как это сделать:</p>
-      <ol>
-        <li data-i18n="contrib_step_1">Форкни репозиторий <code>Stintik-123/StintikVPN</code></li>
-        <li data-i18n="contrib_step_2">Добавь свою подписку в соответствующий файл (<code>vless.txt</code>, <code>trojan.txt</code> и т.д.)</li>
-        <li data-i18n="contrib_step_3">Создай pull request с описанием что добавил</li>
-        <li data-i18n="contrib_step_4">Дождись ревью и мёрджа</li>
-      </ol>
-      <a href="https://github.com/Stintik-123/StintikVPN" target="_blank" class="btn btn-primary">
-        <span data-i18n="contrib_btn">Открыть репозиторий</span> <span class="arrow">→</span>
-      </a>
-    </div>
-  </section>
+    <!-- Как это работает (Для всех возрастов) -->
+    <section id="how-it-works" class="py-24 px-6 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 gs-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Три простых шага</h2>
+                <p class="text-zinc-400 max-w-xl mx-auto">Мы убрали всё лишнее. Вам не нужно быть программистом, чтобы настроить безопасное соединение.</p>
+            </div>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="cta-card reveal">
-      <h2 data-i18n="cta_title">Поддержи проект.<br>Оставь интернет свободным.</h2>
-      <p data-i18n="cta_desc">StintikVPN — некоммерческий. Подпишись на Telegram-канал, чтобы быть в курсе обновлений.</p>
-      <div class="cta-actions">
-        <a href="https://github.com/Stintik-123/StintikVPN" target="_blank" class="btn btn-primary">
-          <span data-i18n="cta_btn_1">★ На GitHub</span> <span class="arrow">→</span>
-        </a>
-        <a href="https://t.me/stintikvpn" target="_blank" class="btn btn-ghost" data-i18n="cta_btn_2">Telegram-канал</a>
-      </div>
-    </div>
-  </section>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Шаг 1 -->
+                <div class="glass-card p-8 rounded-2xl gs-reveal">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6 text-white font-bold text-xl">1</div>
+                    <h3 class="text-xl font-bold mb-3">Скачайте приложение</h3>
+                    <p class="text-zinc-400 leading-relaxed">Установите бесплатное приложение на телефон или компьютер. Мы рекомендуем <span class="text-white font-medium">Hiddify</span> или <span class="text-white font-medium">Nekobox</span>.</p>
+                </div>
+                <!-- Шаг 2 -->
+                <div class="glass-card p-8 rounded-2xl gs-reveal">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6 text-white font-bold text-xl">2</div>
+                    <h3 class="text-xl font-bold mb-3">Скопируйте ссылку</h3>
+                    <p class="text-zinc-400 leading-relaxed">Нажмите большую кнопку «Копировать» ниже на этой странице. Ссылка автоматически сохранится в вашем устройстве.</p>
+                </div>
+                <!-- Шаг 3 -->
+                <div class="glass-card p-8 rounded-2xl gs-reveal">
+                    <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6 text-white font-bold text-xl">3</div>
+                    <h3 class="text-xl font-bold mb-3">Вставьте и пользуйтесь</h3>
+                    <p class="text-zinc-400 leading-relaxed">Откройте приложение, найдите кнопку «Добавить из буфера обмена» и нажмите её. Готово!</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    <div class="footer-inner">
-      <div data-i18n="footer_copy">© 2026 StintikVPN · Made with ♥</div>
-      <div class="footer-links">
-        <a href="https://github.com/Stintik-123/StintikVPN" target="_blank">GitHub</a>
-        <a href="https://t.me/stintikvpn" target="_blank">Telegram</a>
-        <a href="#" data-i18n="footer_top">Наверх ↑</a>
-      </div>
-    </div>
-  </footer>
+    <!-- Центр управления подписками -->
+    <section id="get-started" class="py-24 px-6 relative">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12 gs-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Центр подключений</h2>
+                <p class="text-zinc-400">Выберите подходящий вариант. Для 99% пользователей достаточно «Основной ссылки».</p>
+            </div>
 
-</div>
+            <!-- Основная ссылка (Самая заметная) -->
+            <div class="glass-card p-6 md:p-8 rounded-2xl border-white/10 bg-white/[0.03] mb-8 gs-reveal relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i data-lucide="sparkles" class="w-24 h-24 text-white"></i>
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-500/20 text-green-400 border border-green-500/20">Рекомендуем</span>
+                            <span class="text-xs text-zinc-500">Для всех устройств</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Основная подписка Stintik</h3>
+                        <p class="text-zinc-400 text-sm md:text-base">Автоматически подбирает самый быстрый и стабильный сервер. Идеально для телефона и компьютера.</p>
+                    </div>
+                    <button onclick="copyLink(this, 'https://gitverse.ru/api/repos/ru-wbl/wl/raw/branch/master/KvRuVPN/KvRuVPN.txt')" class="copy-btn flex-shrink-0 px-6 py-4 bg-white text-zinc-950 font-bold rounded-xl hover:bg-zinc-200 flex items-center justify-center gap-2 min-w-[180px]">
+                        <i data-lucide="copy" class="w-5 h-5 icon-default"></i>
+                        <i data-lucide="check" class="w-5 h-5 icon-success hidden"></i>
+                        <span class="text-default">Копировать</span>
+                        <span class="text-success hidden">Скопировано!</span>
+                    </button>
+                </div>
+            </div>
 
-<!-- QR MODAL -->
-<div class="qr-modal" id="qrModal">
-  <div class="qr-content">
-    <button class="qr-close" id="qrClose">×</button>
-    <div class="qr-code" id="qrCode"></div>
-    <div class="qr-title" data-i18n="qr_title">Сканируй QR-код</div>
-    <div class="qr-desc" data-i18n="qr_desc">Наведи камеру телефона на код для быстрого импорта подписки</div>
-  </div>
-</div>
+            <!-- Дополнительные варианты (Аккордеон/Сетка для продвинутых) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 gs-reveal">
+                <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-semibold text-white mb-1 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-zinc-400"></i> Запасной вариант
+                        </h4>
+                        <p class="text-sm text-zinc-500 mb-4">Если основная ссылка временно недоступна.</p>
+                    </div>
+                    <button onclick="copyLink(this, 'https://vpn.akres.fun/all')" class="copy-btn w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+                        <i data-lucide="copy" class="w-4 h-4 icon-default"></i>
+                        <i data-lucide="check" class="w-4 h-4 icon-success hidden"></i>
+                        <span class="text-default">Копировать Akres</span>
+                        <span class="text-success hidden">Скопировано!</span>
+                    </button>
+                </div>
 
-<!-- TG SUBSCRIBE MODAL -->
-<div class="tg-modal" id="tgModal">
-  <div class="tg-content">
-    <button class="tg-close" id="tgClose">×</button>
-    <div class="tg-icon">✈️</div>
-    <div class="tg-title" data-i18n="tg_modal_title">Подпишись на канал!</div>
-    <div class="tg-desc" data-i18n="tg_modal_desc">Будь в курсе всех обновлений, новых подписок и гайдов. Только полезная информация, без спама.</div>
-    <div class="tg-actions">
-      <a href="https://t.me/stintikvpn" target="_blank" class="btn btn-primary" id="tgSubscribe">
-        <span data-i18n="tg_modal_btn">Подписаться</span> <span class="arrow">→</span>
-      </a>
-      <button class="btn btn-ghost" id="tgSkip" data-i18n="tg_modal_skip">Продолжить</button>
-    </div>
-  </div>
-</div>
+                <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-semibold text-white mb-1 flex items-center gap-2">
+                            <i data-lucide="code" class="w-4 h-4 text-zinc-400"></i> Для продвинутых
+                        </h4>
+                        <p class="text-sm text-zinc-500 mb-4">Отдельные ссылки на протоколы VLESS / VMess.</p>
+                    </div>
+                    <button onclick="copyLink(this, 'https://mifa.world/vless')" class="copy-btn w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+                        <i data-lucide="copy" class="w-4 h-4 icon-default"></i>
+                        <i data-lucide="check" class="w-4 h-4 icon-success hidden"></i>
+                        <span class="text-default">Копировать VLESS</span>
+                        <span class="text-success hidden">Скопировано!</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-  // === TRANSLATIONS ===
-  const translations = {
-    ru: {
-      nav_subs: 'Подписки',
-      nav_tgproxy: 'TG Прокси',
-      nav_clients: 'Клиенты',
-      nav_guides: 'Гайды',
-      nav_team: 'Команда',
-      hero_badge: 'Все сервисы <strong>работают</strong> · Июль 2026',
-      hero_title_1: 'Свобода',
-      hero_title_2: 'в <span class="accent">сети</span> —',
-      hero_title_3: '<span class="outline">без границ.</span>',
-      hero_sub: 'Коллекция лучших подписок, инструментов и гайдов для обхода блокировок. Telegram, Discord, YouTube — проверено, работает, обновляется автоматически.',
-      hero_btn_1: 'Получить подписку',
-      hero_btn_2: 'Читать гайды',
-      stat_protocols: 'Протоколов',
-      stat_monitoring: 'Мониторинг',
-      stat_opensource: 'Open Source',
-      stat_forever: 'Навсегда',
-      subs_num: 'Подписки',
-      subs_title: 'Готовые конфиги. Один клик — и ты в сети.',
-      subs_desc: 'Собираем лучшее со всего комьюнити. Белые и чёрные списки, VLESS, Trojan, Shadowsocks, Hysteria2 — всё в одном месте.',
-      subs_loading: 'Загрузка подписок...',
-      subs_refresh: 'Обновить',
-      tgproxy_num: 'TG Прокси',
-      tgproxy_title: 'Готовые MTProxy ссылки.',
-      tgproxy_desc: 'Просто нажми на ссылку — Telegram откроется с уже настроенным прокси. Работает на всех устройствах.',
-      clients_num: 'Клиенты',
-      clients_title: 'Под твоё устройство.',
-      clients_desc: 'Сайт определил платформу автоматически. Отмеченный клиент — лучший выбор для тебя.',
-      features_num: 'Возможности',
-      features_title: 'Всё, что нужно для свободного интернета.',
-      features_desc: 'От готовых подписок до тонкой настройки DPI-обхода. Один источник — ноль лишнего.',
-      feature_1_title: 'Готовые подписки',
-      feature_1_desc: 'VLESS, Trojan, Shadowsocks, Hysteria2 — белые и чёрные списки. Обновляются автоматически из репозитория.',
-      feature_2_title: 'Любое устройство',
-      feature_2_desc: 'Клиенты под Windows, macOS, Linux, Android и iOS. Сайт сам определит платформу и подскажет лучшее.',
-      feature_3_title: 'Обход DPI',
-      feature_3_desc: 'ByeByeDPI, zapret, tgwsproxy — проверенные решения.',
-      feature_4_title: 'Пошаговые гайды',
-      feature_4_desc: 'От установки до тонкой настройки под провайдера.',
-      feature_5_title: 'Open Source',
-      feature_5_desc: 'Весь код открыт. Форкай, улучшай, предлагай.',
-      status_num: 'Статус',
-      status_title: 'Работает прямо сейчас.',
-      status_desc: 'Мониторинг доступности сервисов. Без пинга, без магии — только факты.',
-      status_tg_desc: 'Работает через tgwsproxy и ByeByeDPI. Стабильно у большинства провайдеров.',
-      status_discord_desc: 'Голосовые и текстовые каналы работают через zapret. Стриминг — без обрывов.',
-      status_yt_desc: 'Превентивные меры настроены. Подписки и зеркала готовы к любой блокировке.',
-      status_method: 'Метод:',
-      status_ping: 'Пинг:',
-      status_speed: 'Скорость:',
-      guides_num: 'Гайды',
-      guides_title: 'Настройка за 10 минут.',
-      guides_desc: 'Проверенные инструкции. Копируй команды, следуй шагам — всё будет работать.',
-      guide_1_title: 'Telegram через tgwsproxy',
-      guide_1_desc: '<strong>tgwsproxy</strong> — легковесный WebSocket-прокси для Telegram. Поднимается на любом VPS, обходит DPI через маскировку под обычный HTTPS.',
-      guide_requirements: 'Что понадобится',
-      guide_1_req_1: 'VPS с белым IP (от 100₽/мес)',
-      guide_1_req_2: 'Домен (или работа через IP)',
-      guide_1_req_3: 'SSH-клиент',
-      guide_step_1: 'Шаг 1. Подключение к серверу',
-      guide_step_2: 'Шаг 2. Установка зависимостей',
-      guide_step_3: 'Шаг 3. Сборка',
-      guide_step_4: 'Шаг 4. Запуск',
-      guide_step_5: 'Шаг 5. Настройка клиента',
-      guide_1_step_5_desc: 'В Telegram-клиенте укажи: Server — IP или домен VPS, Port — 8443, Secret — YOUR_SECRET.',
-      guide_2_title: 'Telegram через ByeByeDPI',
-      guide_2_tag: 'Локально · 3 минуты',
-      guide_2_desc: '<strong>ByeByeDPI</strong> — форк zapret под Telegram. Работает без VPS, прямо на твоём компьютере или роутере.',
-      guide_2_step_1_desc: 'Релиз — с официального репозитория ByeByeDPI. Для Windows — <code>byebyedpi-win.zip</code>, для Linux — <code>byebyedpi-linux</code>.',
-      guide_2_step_2_desc: 'От имени администратора:',
-      guide_2_step_2_note: 'Флаг <code>--auto</code> подбирает параметры под твой провайдер.',
-      guide_2_step_4_desc: 'ByeByeDPI поднимает SOCKS5 на <code>127.0.0.1:1080</code>. В Telegram: SOCKS5, 127.0.0.1, 1080.',
-      guide_3_title: 'Discord и YouTube через zapret',
-      guide_3_tag: 'Роутер / VPS · 10 минут',
-      guide_3_desc: '<strong>zapret</strong> (от bolvan) — универсальный обход DPI. Работает на уровне ядра, модифицирует пакеты на лету.',
-      guide_3_strat_1: '<strong>TPWS</strong> — легковесная, без root на клиенте',
-      guide_3_strat_2: '<strong>NFQWS</strong> — мощная, работает с QUIC и TLS',
-      guide_3_strat_3: '<strong>MDIG</strong> — обход блокировки по IP',
-      guide_3_step_4_desc: 'Отредактируй <code>/opt/zapret/ipset/zapret-hosts-user.txt</code>:',
-      sni_num: 'SNI / CIDR',
-      sni_title: 'Списки для zapret.',
-      sni_desc: 'Готовые SNI и CIDR маски для настройки zapret. Копируй и вставляй в конфигурацию.',
-      sni_list_title: 'SNI списки',
-      cidr_list_title: 'CIDR маски',
-      team_num: 'Команда',
-      team_title: 'Спасибо тем, кто делает проект.',
-      team_desc: 'Некоммерческая инициатива. Без инвесторов, без рекламы — только энтузиазм.',
-      team_stintik_role: 'Основатель · Куратор подписок',
-      team_sapbot_role: 'Разработка · Автоматизация',
-      contrib_num: 'Contributing',
-      contrib_title: 'Хочешь помочь?',
-      contrib_desc: 'Проект открыт для всех. Добавляй подписки, гайды, исправляй ошибки.',
-      contrib_how: 'Как внести вклад',
-      contrib_desc_2: 'Мы принимаем pull requests с новыми подписками, гайдами и улучшениями. Вот как это сделать:',
-      contrib_step_1: 'Форкни репозиторий <code>Stintik-123/StintikVPN</code>',
-      contrib_step_2: 'Добавь свою подписку в соответствующий файл (<code>vless.txt</code>, <code>trojan.txt</code> и т.д.)',
-      contrib_step_3: 'Создай pull request с описанием что добавил',
-      contrib_step_4: 'Дождись ревью и мёрджа',
-      contrib_btn: 'Открыть репозиторий',
-      cta_title: 'Поддержи проект.<br>Оставь интернет свободным.',
-      cta_desc: 'StintikVPN — некоммерческий. Подпишись на Telegram-канал, чтобы быть в курсе обновлений.',
-      cta_btn_1: '★ На GitHub',
-      cta_btn_2: 'Telegram-канал',
-      footer_copy: '© 2026 StintikVPN · Made with ♥',
-      footer_top: 'Наверх ↑',
-      qr_title: 'Сканируй QR-код',
-      qr_desc: 'Наведи камеру телефона на код для быстрого импорта подписки',
-      tg_modal_title: 'Подпишись на канал!',
-      tg_modal_desc: 'Будь в курсе всех обновлений, новых подписок и гайдов. Только полезная информация, без спама.',
-      tg_modal_btn: 'Подписаться',
-      tg_modal_skip: 'Продолжить'
-    },
-    en: {
-      nav_subs: 'Subscriptions',
-      nav_tgproxy: 'TG Proxy',
-      nav_clients: 'Clients',
-      nav_guides: 'Guides',
-      nav_team: 'Team',
-      hero_badge: 'All services <strong>working</strong> · July 2026',
-      hero_title_1: 'Freedom',
-      hero_title_2: 'in the <span class="accent">network</span> —',
-      hero_title_3: '<span class="outline">without borders.</span>',
-      hero_sub: 'Collection of the best subscriptions, tools and guides to bypass blocks. Telegram, Discord, YouTube — tested, works, auto-updated.',
-      hero_btn_1: 'Get subscription',
-      hero_btn_2: 'Read guides',
-      stat_protocols: 'Protocols',
-      stat_monitoring: 'Monitoring',
-      stat_opensource: 'Open Source',
-      stat_forever: 'Forever',
-      subs_num: 'Subscriptions',
-      subs_title: 'Ready configs. One click — and you\'re online.',
-      subs_desc: 'Collecting the best from the community. White and black lists, VLESS, Trojan, Shadowsocks, Hysteria2 — all in one place.',
-      subs_loading: 'Loading subscriptions...',
-      subs_refresh: 'Refresh',
-      tgproxy_num: 'TG Proxy',
-      tgproxy_title: 'Ready MTProxy links.',
-      tgproxy_desc: 'Just click the link — Telegram will open with the configured proxy. Works on all devices.',
-      clients_num: 'Clients',
-      clients_title: 'For your device.',
-      clients_desc: 'The site detected your platform automatically. The marked client is the best choice for you.',
-      features_num: 'Features',
-      features_title: 'Everything you need for a free internet.',
-      features_desc: 'From ready subscriptions to fine-tuning DPI bypass. One source — zero extra.',
-      feature_1_title: 'Ready subscriptions',
-      feature_1_desc: 'VLESS, Trojan, Shadowsocks, Hysteria2 — white and black lists. Auto-updated from the repository.',
-      feature_2_title: 'Any device',
-      feature_2_desc: 'Clients for Windows, macOS, Linux, Android and iOS. The site will detect the platform and suggest the best.',
-      feature_3_title: 'DPI bypass',
-      feature_3_desc: 'ByeByeDPI, zapret, tgwsproxy — proven solutions.',
-      feature_4_title: 'Step-by-step guides',
-      feature_4_desc: 'From installation to fine-tuning for your provider.',
-      feature_5_title: 'Open Source',
-      feature_5_desc: 'All code is open. Fork, improve, suggest.',
-      status_num: 'Status',
-      status_title: 'Working right now.',
-      status_desc: 'Service availability monitoring. No ping, no magic — just facts.',
-      status_tg_desc: 'Works through tgwsproxy and ByeByeDPI. Stable for most providers.',
-      status_discord_desc: 'Voice and text channels work through zapret. Streaming — without interruptions.',
-      status_yt_desc: 'Preventive measures are configured. Subscriptions and mirrors are ready for any block.',
-      status_method: 'Method:',
-      status_ping: 'Ping:',
-      status_speed: 'Speed:',
-      guides_num: 'Guides',
-      guides_title: 'Setup in 10 minutes.',
-      guides_desc: 'Proven instructions. Copy commands, follow steps — everything will work.',
-      guide_1_title: 'Telegram via tgwsproxy',
-      guide_1_desc: '<strong>tgwsproxy</strong> — lightweight WebSocket proxy for Telegram. Runs on any VPS, bypasses DPI by masquerading as regular HTTPS.',
-      guide_requirements: 'What you need',
-      guide_1_req_1: 'VPS with public IP (from 100₽/month)',
-      guide_1_req_2: 'Domain (or work via IP)',
-      guide_1_req_3: 'SSH client',
-      guide_step_1: 'Step 1. Connect to server',
-      guide_step_2: 'Step 2. Install dependencies',
-      guide_step_3: 'Step 3. Build',
-      guide_step_4: 'Step 4. Run',
-      guide_step_5: 'Step 5. Configure client',
-      guide_1_step_5_desc: 'In Telegram client specify: Server — VPS IP or domain, Port — 8443, Secret — YOUR_SECRET.',
-      guide_2_title: 'Telegram via ByeByeDPI',
-      guide_2_tag: 'Local · 3 minutes',
-      guide_2_desc: '<strong>ByeByeDPI</strong> — zapret fork for Telegram. Works without VPS, right on your computer or router.',
-      guide_2_step_1_desc: 'Release — from the official ByeByeDPI repository. For Windows — <code>byebyedpi-win.zip</code>, for Linux — <code>byebyedpi-linux</code>.',
-      guide_2_step_2_desc: 'As administrator:',
-      guide_2_step_2_note: 'Flag <code>--auto</code> selects parameters for your provider.',
-      guide_2_step_4_desc: 'ByeByeDPI raises SOCKS5 on <code>127.0.0.1:1080</code>. In Telegram: SOCKS5, 127.0.0.1, 1080.',
-      guide_3_title: 'Discord and YouTube via zapret',
-      guide_3_tag: 'Router / VPS · 10 minutes',
-      guide_3_desc: '<strong>zapret</strong> (by bolvan) — universal DPI bypass. Works at kernel level, modifies packets on the fly.',
-      guide_3_strat_1: '<strong>TPWS</strong> — lightweight, no root on client',
-      guide_3_strat_2: '<strong>NFQWS</strong> — powerful, works with QUIC and TLS',
-      guide_3_strat_3: '<strong>MDIG</strong> — bypass IP blocking',
-      guide_3_step_4_desc: 'Edit <code>/opt/zapret/ipset/zapret-hosts-user.txt</code>:',
-      sni_num: 'SNI / CIDR',
-      sni_title: 'Lists for zapret.',
-      sni_desc: 'Ready SNI and CIDR masks for zapret configuration. Copy and paste into config.',
-      sni_list_title: 'SNI lists',
-      cidr_list_title: 'CIDR masks',
-      team_num: 'Team',
-      team_title: 'Thanks to those who make the project.',
-      team_desc: 'Non-profit initiative. No investors, no ads — only enthusiasm.',
-      team_stintik_role: 'Founder · Subscription curator',
-      team_sapbot_role: 'Development · Automation',
-      contrib_num: 'Contributing',
-      contrib_title: 'Want to help?',
-      contrib_desc: 'Project is open for everyone. Add subscriptions, guides, fix bugs.',
-      contrib_how: 'How to contribute',
-      contrib_desc_2: 'We accept pull requests with new subscriptions, guides and improvements. Here\'s how to do it:',
-      contrib_step_1: 'Fork repository <code>Stintik-123/StintikVPN</code>',
-      contrib_step_2: 'Add your subscription to the appropriate file (<code>vless.txt</code>, <code>trojan.txt</code> etc.)',
-      contrib_step_3: 'Create pull request with description of what you added',
-      contrib_step_4: 'Wait for review and merge',
-      contrib_btn: 'Open repository',
-      cta_title: 'Support the project.<br>Keep the internet free.',
-      cta_desc: 'StintikVPN is non-profit. Subscribe to Telegram channel to stay updated.',
-      cta_btn_1: '★ On GitHub',
-      cta_btn_2: 'Telegram channel',
-      footer_copy: '© 2026 StintikVPN · Made with ♥',
-      footer_top: 'To top ↑',
-      qr_title: 'Scan QR code',
-      qr_desc: 'Point your phone camera at the code for quick subscription import',
-      tg_modal_title: 'Subscribe to the channel!',
-      tg_modal_desc: 'Stay updated on all updates, new subscriptions and guides. Only useful information, no spam.',
-      tg_modal_btn: 'Subscribe',
-      tg_modal_skip: 'Continue'
-    }
-  };
+    <!-- Инструкции по приложениям -->
+    <section class="py-24 px-6 border-t border-white/5 bg-zinc-950/50">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12 gs-reveal">
+                <h2 class="text-3xl font-bold mb-4">Куда вставить ссылку?</h2>
+                <p class="text-zinc-400">Эти приложения бесплатны, безопасны и работают на Android, iOS, Windows и macOS.</p>
+            </div>
 
-  let currentLang = localStorage.getItem('lang') || 'ru';
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <!-- Hiddify -->
+                <a href="https://hiddify.com/" target="_blank" class="glass-card p-6 rounded-2xl flex flex-col items-center text-center hover:border-blue-500/30 group gs-reveal">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="globe" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Hiddify</h3>
+                    <p class="text-sm text-zinc-500">Самый простой и современный клиент. Идеален для новичков.</p>
+                    <span class="mt-4 text-xs font-medium text-blue-400 flex items-center gap-1">Скачать <i data-lucide="external-link" class="w-3 h-3"></i></span>
+                </a>
 
-  function applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (translations[currentLang][key]) {
-        el.innerHTML = translations[currentLang][key];
-      }
-    });
-    document.getElementById('langToggle').textContent = currentLang.toUpperCase();
-  }
+                <!-- Nekobox -->
+                <a href="https://github.com/MatsuriDayo/NekoBoxForAndroid" target="_blank" class="glass-card p-6 rounded-2xl flex flex-col items-center text-center hover:border-purple-500/30 group gs-reveal">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="box" class="w-8 h-8 text-purple-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">NekoBox</h3>
+                    <p class="text-sm text-zinc-500">Мощный и гибкий инструмент для Android. Выбор продвинутых пользователей.</p>
+                    <span class="mt-4 text-xs font-medium text-purple-400 flex items-center gap-1">Скачать <i data-lucide="external-link" class="w-3 h-3"></i></span>
+                </a>
 
-  document.getElementById('langToggle').addEventListener('click', () => {
-    currentLang = currentLang === 'ru' ? 'en' : 'ru';
-    localStorage.setItem('lang', currentLang);
-    applyTranslations();
-  });
+                <!-- Shadowrocket (iOS) -->
+                <div class="glass-card p-6 rounded-2xl flex flex-col items-center text-center hover:border-green-500/30 group gs-reveal">
+                    <div class="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i data-lucide="smartphone" class="w-8 h-8 text-green-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Shadowrocket</h3>
+                    <p class="text-sm text-zinc-500">Лучшее решение для iPhone и iPad. Доступно в AppStore (платно).</p>
+                    <span class="mt-4 text-xs font-medium text-zinc-500">Только iOS</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  applyTranslations();
+    <!-- Доверие и статистика (как на giftovik) -->
+    <section class="py-20 px-6 border-t border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center gs-reveal">
+                <div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-white mb-2">100%</div>
+                    <div class="text-sm text-zinc-500 uppercase tracking-wider font-medium">Бесплатно</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-white mb-2">0 ₽</div>
+                    <div class="text-sm text-zinc-500 uppercase tracking-wider font-medium">Без скрытых платежей</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-white mb-2">24/7</div>
+                    <div class="text-sm text-zinc-500 uppercase tracking-wider font-medium">Автообновление</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-extrabold text-white mb-2">Open</div>
+                    <div class="text-sm text-zinc-500 uppercase tracking-wider font-medium">Открытый код</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // === THEME ===
-  const themeToggle = document.getElementById('themeToggle');
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  themeToggle.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
-  themeToggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    themeToggle.textContent = next === 'dark' ? '🌙' : '☀️';
-  });
-
-  // === DEVICE DETECTION ===
-  const ua = navigator.userAgent.toLowerCase();
-  let currentPlatform = 'other';
-  if (/iphone|ipad|ipod/.test(ua)) currentPlatform = 'ios';
-  else if (/android/.test(ua)) currentPlatform = 'android';
-  else if (/windows/.test(ua)) currentPlatform = 'windows';
-  else if (/mac/.test(ua) && !/iphone|ipad|ipod/.test(ua)) currentPlatform = 'macos';
-  else if (/linux/.test(ua)) currentPlatform = 'linux';
-
-  // === CLIENTS ===
-  const clients = [
-    {
-      name: 'Hiddify',
-      icon: '🛡️',
-      desc: { ru: 'Универсальный клиент. Поддерживает все протоколы, автообновление подписок, rule-based routing.', en: 'Universal client. Supports all protocols, auto subscription update, rule-based routing.' },
-      platforms: ['windows', 'macos', 'linux', 'android', 'ios'],
-      links: {
-        windows: 'https://github.com/hiddify/hiddify-app/releases/latest',
-        macos: 'https://github.com/hiddify/hiddify-app/releases/latest',
-        linux: 'https://github.com/hiddify/hiddify-app/releases/latest',
-        android: 'https://play.google.com/store/apps/details?id=app.hiddify.com',
-        ios: 'https://apps.apple.com/app/hiddify/id6652700965'
-      }
-    },
-    {
-      name: 'v2rayN',
-      icon: '🚀',
-      desc: { ru: 'Классика для Windows. Мощный, с гибкой настройкой, поддержкой всех протоколов и автообновлением.', en: 'Classic for Windows. Powerful, with flexible settings, support for all protocols and auto-update.' },
-      platforms: ['windows'],
-      links: { windows: 'https://github.com/2dust/v2rayN/releases/latest' }
-    },
-    {
-      name: 'NekoBox',
-      icon: '🐱',
-      desc: { ru: 'Лёгкий клиент для Android. Быстрый, минималистичный, без рекламы. Sing-box под капотом.', en: 'Lightweight client for Android. Fast, minimalist, no ads. Sing-box under the hood.' },
-      platforms: ['android'],
-      links: { android: 'https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/latest' }
-    },
-    {
-      name: 'NekoRay',
-      icon: '🐈',
-      desc: { ru: 'Десктопный клиент на Qt. Поддерживает все современные протоколы, удобный UI.', en: 'Desktop client on Qt. Supports all modern protocols, convenient UI.' },
-      platforms: ['windows', 'linux'],
-      links: {
-        windows: 'https://github.com/MatsuriDayo/nekoray/releases/latest',
-        linux: 'https://github.com/MatsuriDayo/nekoray/releases/latest'
-      }
-    },
-    {
-      name: 'Stash',
-      icon: '📦',
-      desc: { ru: 'Премиум-клиент для iOS/macOS. Красивый интерфейс, Rule-based routing, профили.', en: 'Premium client for iOS/macOS. Beautiful interface, Rule-based routing, profiles.' },
-      platforms: ['ios', 'macos'],
-      links: {
-        ios: 'https://apps.apple.com/app/stash-rule-based-proxy/id1597885060',
-        macos: 'https://apps.apple.com/app/stash-rule-based-proxy/id1597885060'
-      }
-    },
-    {
-      name: 'Shadowrocket',
-      icon: '🍎',
-      desc: { ru: 'Платный, но лучший для iOS. Стабильный, с поддержкой всех протоколов и правил.', en: 'Paid, but best for iOS. Stable, with support for all protocols and rules.' },
-      platforms: ['ios'],
-      links: { ios: 'https://apps.apple.com/app/shadowrocket/id932747118' }
-    }
-  ];
-
-  const clientsGrid = document.getElementById('clientsGrid');
-  clients.forEach(client => {
-    const isRecommended = client.platforms.includes(currentPlatform);
-    const card = document.createElement('div');
-    card.className = 'client-card' + (isRecommended ? ' recommended' : '');
-    const platformsHTML = client.platforms.map(p =>
-      `<span class="platform-badge ${p === currentPlatform ? 'current' : ''}">${p}</span>`
-    ).join('');
-    const link = client.links[currentPlatform] || Object.values(client.links)[0];
-    card.innerHTML = `
-      <div class="client-head">
-        <div class="client-icon">${client.icon}</div>
-        <div class="client-name">${client.name}</div>
-      </div>
-      <div class="client-desc">${client.desc[currentLang]}</div>
-      <div class="client-platforms">${platformsHTML}</div>
-      <a href="${link}" target="_blank" class="client-download">
-        ${currentLang === 'ru' ? 'Скачать' : 'Download'} <span class="arrow">→</span>
-      </a>
-    `;
-    clientsGrid.appendChild(card);
-  });
-
-  // === TG PROXY ===
-  const tgProxies = [
-    {
-      name: { ru: 'Основной прокси', en: 'Main proxy' },
-      desc: { ru: 'Стабильный прокси для Telegram. Работает у большинства провайдеров.', en: 'Stable proxy for Telegram. Works for most providers.' },
-      link: 'https://t.me/proxy?server=
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 px-6 bg-zinc-950">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded
